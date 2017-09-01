@@ -380,7 +380,7 @@ class Mail
      *
      * @return static
      */
-    public function addAttachment(Attachment $attachment)
+    public function addAttachment(Attachment $attachment): Mail
     {
         $this->attachments[] = $attachment;
 

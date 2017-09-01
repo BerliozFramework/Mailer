@@ -252,7 +252,6 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
 
     /**
      * @inheritdoc
-     * @throws \Berlioz\Mailer\Exception\TransportException
      */
     public function send(\Berlioz\Mailer\Mail $mail)
     {

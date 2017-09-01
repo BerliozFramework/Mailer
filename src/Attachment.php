@@ -51,7 +51,7 @@ class Attachment
      *
      * @return string
      */
-    public function getId($domainName = null)
+    public function getId($domainName = null): string
     {
         if (is_null($this->id)) {
             $source = "0123456789";
@@ -92,7 +92,7 @@ class Attachment
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         if (is_null($this->type)) {
             $finfo = finfo_open(FILEINFO_MIME);

@@ -37,7 +37,7 @@ class Address
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         // E-mail
         if (mb_strlen($this->name) > 0) {
@@ -65,10 +65,14 @@ class Address
      * Set name.
      *
      * @param string $name
+     *
+     * @return static
      */
-    public function setName(string $name)
+    public function setName(string $name): Address
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -86,14 +90,17 @@ class Address
      *
      * @param string $mail
      *
+     * @return static
      * @throws \Berlioz\Mailer\Exception\InvalidArgumentException if email address isn\'t valid.
      */
-    public function setMail(string $mail)
+    public function setMail(string $mail): Address
     {
         if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
             $this->mail = $mail;
         } else {
             throw new InvalidArgumentException(sprintf('"%s" isn\'t a valid email address', $mail));
         }
+
+        return $this;
     }
 }

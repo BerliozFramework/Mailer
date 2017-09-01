@@ -28,6 +28,8 @@ interface TransportInterface
      * Sending of email.
      *
      * @param \Berlioz\Mailer\Mail $mail Mail
+     *
+     * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
      */
     public function send(\Berlioz\Mailer\Mail $mail);
 
@@ -37,6 +39,8 @@ interface TransportInterface
      * @param \Berlioz\Mailer\Mail      $mail      Mail
      * @param \Berlioz\Mailer\Address[] $addresses Address list
      * @param callable                  $callback  Callback called after each email sent
+     *
+     * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
      */
     public function massSend(\Berlioz\Mailer\Mail $mail, array $addresses, callable $callback = null);
 }

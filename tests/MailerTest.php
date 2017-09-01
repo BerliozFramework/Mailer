@@ -24,9 +24,8 @@ class MailerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Class arguments of "transport" options must be an array');
 
-        new Mailer(['transport' =>
-                        ['class'     => '\Berlioz\Mailer\Transport\Smtp',
-                         'arguments' => 'Test']]);
+        new Mailer(['transport' => ['class'     => '\Berlioz\Mailer\Transport\Smtp',
+                                    'arguments' => 'Test']]);
     }
 
     public function testConstructorExceptionTransportOptionsClassMissing()
@@ -34,9 +33,8 @@ class MailerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Missing class name in "transport" options');
 
-        new Mailer(['transport' =>
-                        ['classtest' => '\Berlioz\Mailer\Transport\Smtp',
-                         'arguments' => ['Test']]]);
+        new Mailer(['transport' => ['classtest' => '\Berlioz\Mailer\Transport\Smtp',
+                                    'arguments' => ['Test']]]);
     }
 
     public function testConstructorExceptionTransportOptionsNotStringOrArray()

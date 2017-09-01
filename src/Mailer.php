@@ -91,8 +91,10 @@ class Mailer implements LoggerAwareInterface
      * Sets a logger.
      *
      * @param LoggerInterface $logger
+     *
+     * @return static
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): Mailer
     {
         $this->logger = $logger;
 
@@ -101,6 +103,8 @@ class Mailer implements LoggerAwareInterface
             $transport = $this->transport;
             $transport->setLogger($this->logger);
         }
+
+        return $this;
     }
 
     /**
@@ -124,7 +128,7 @@ class Mailer implements LoggerAwareInterface
      *
      * @return static
      */
-    public function setTransport(TransportInterface $transport)
+    public function setTransport(TransportInterface $transport): Mailer
     {
         // Logger
         if ($transport instanceof LoggerAwareInterface && !is_null($this->logger)) {
@@ -140,10 +144,12 @@ class Mailer implements LoggerAwareInterface
      * Sending of email.
      *
      * @param \Berlioz\Mailer\Mail $mail Mail
+     *
+     * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
      */
     public function send(Mail $mail)
     {
-        return $this->getTransport()->send($mail);
+        $this->getTransport()->send($mail);
     }
 
     /**
@@ -152,9 +158,11 @@ class Mailer implements LoggerAwareInterface
      * @param \Berlioz\Mailer\Mail      $mail      Mail
      * @param \Berlioz\Mailer\Address[] $addresses Address list
      * @param callable                  $callback  Callback called after each email sent
+     *
+     * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
      */
     public function massSend(Mail $mail, array $addresses, callable $callback = null)
     {
-        return $this->getTransport()->massSend($mail, $addresses, $callback);
+        $this->getTransport()->massSend($mail, $addresses, $callback);
     }
 }
