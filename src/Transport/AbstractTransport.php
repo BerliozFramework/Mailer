@@ -94,6 +94,8 @@ abstract class AbstractTransport implements TransportInterface
      */
     protected function getContents(\Berlioz\Mailer\Mail $mail): array
     {
+        $contents = [];
+
         // Attachments
         $attachments = $mail->getAttachments();
         $htmlAttachments =
@@ -113,7 +115,6 @@ abstract class AbstractTransport implements TransportInterface
 
         // Contents
         {
-            $contents = [];
             // If has $attachments
             if (count($attachments) > 0) {
                 $contents[] = sprintf('Content-Type: multipart/mixed; boundary="%s"', $this->getBoundary('mixed'));
@@ -139,8 +140,7 @@ abstract class AbstractTransport implements TransportInterface
                                       mb_detect_encoding($mail->getText()));
                 $contents[] = 'Content-Transfer-Encoding: base64';
                 $contents[] = '';
-                $contents = array_merge($contents,
-                                        str_split(base64_encode($mail->getText()), 77));
+                $contents = array_merge($contents, str_split(base64_encode($mail->getText()), 77));
                 $contents[] = '';
             }
 
@@ -177,7 +177,7 @@ abstract class AbstractTransport implements TransportInterface
                         $contents[] = 'Content-Transfer-Encoding: base64';
                         $contents[] = sprintf('Content-ID: <%s>', $attachment->getId());
                         $contents[] = '';
-                        $contents = array_merge($contents, str_split(base64_encode(file_get_contents($attachment->getContents()))), 77);
+                        $contents = array_merge($contents, str_split(base64_encode(file_get_contents($attachment->getContents())), 77));
                         $contents[] = '';
                     }
                     $contents[] = sprintf('--%s--', $this->getBoundary('related'));
@@ -196,7 +196,7 @@ abstract class AbstractTransport implements TransportInterface
                     $contents[] = 'Content-Disposition: attachment;';
                     $contents[] = sprintf('    filename="%s"', $attachment->getName());
                     $contents[] = '';
-                    $contents = array_merge($contents, str_split(base64_encode(file_get_contents($attachment->getContents()))), 77);
+                    $contents = array_merge($contents, str_split(base64_encode(file_get_contents($attachment->getContents())), 77));
                     $contents[] = '';
                 }
                 $contents[] = sprintf('--%s--', $this->getBoundary('mixed'));
