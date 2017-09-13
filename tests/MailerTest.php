@@ -12,6 +12,7 @@
 
 namespace Berlioz\Mailer\Tests;
 
+
 use Berlioz\Mailer\Exception\InvalidArgumentException;
 use Berlioz\Mailer\Mailer;
 use Berlioz\Mailer\Transport\Smtp;

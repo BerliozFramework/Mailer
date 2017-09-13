@@ -109,9 +109,9 @@ class Attachment
     /**
      * Get name.
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -133,9 +133,9 @@ class Attachment
     /**
      * Get disposition.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDisposition(): string
+    public function getDisposition(): ?string
     {
         return $this->disposition;
     }

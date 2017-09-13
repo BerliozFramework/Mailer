@@ -21,7 +21,7 @@ abstract class AbstractTransport implements TransportInterface
     /**
      * @inheritdoc
      */
-    public function massSend(\Berlioz\Mailer\Mail $mail, array $addresses, callable $callback = null)
+    public function massSend(\Berlioz\Mailer\Mail $mail, array $addresses, callable $callback = null): void
     {
         $i = 0;
         /** @var \Berlioz\Mailer\Address $address */

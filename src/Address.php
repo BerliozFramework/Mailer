@@ -22,6 +22,12 @@ class Address
     /** @var string Mail */
     private $mail;
 
+    /**
+     * Address constructor.
+     *
+     * @param string|null $mail
+     * @param string|null $name
+     */
     public function __construct(string $mail = null, string $name = null)
     {
         if (!is_null($mail)) {
@@ -56,7 +62,7 @@ class Address
      *
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -80,7 +86,7 @@ class Address
      *
      * @return string
      */
-    public function getMail(): string
+    public function getMail(): ?string
     {
         return $this->mail;
     }

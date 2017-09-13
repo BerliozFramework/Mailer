@@ -12,6 +12,7 @@
 
 namespace Berlioz\Mailer\Tests;
 
+
 use Berlioz\Mailer\Address;
 use Berlioz\Mailer\Mail;
 use PHPUnit\Framework\TestCase;

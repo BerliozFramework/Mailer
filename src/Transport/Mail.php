@@ -21,7 +21,7 @@ class Mail extends AbstractTransport implements TransportInterface
      * @inheritdoc
      * @throws \Berlioz\Mailer\Exception\TransportException
      */
-    public function send(\Berlioz\Mailer\Mail $mail)
+    public function send(\Berlioz\Mailer\Mail $mail): void
     {
         // To
         $toAddresses = $mail->getTo();

@@ -69,7 +69,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
      *
      * @return array
      */
-    public static function __set_state($an_array)
+    public static function __set_state($an_array): array
     {
         return ['host'     => $an_array['host'],
                 'port'     => $an_array['port'],
@@ -83,7 +83,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
      *
      * @return array
      */
-    public function __debugInfo()
+    public function __debugInfo(): array
     {
         return ['host'     => $this->host,
                 'port'     => $this->port,
@@ -95,9 +95,10 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
     /**
      * Connect to resource.
      *
+     * @return void
      * @throws \Berlioz\Mailer\Exception\TransportException
      */
-    private function connect()
+    private function connect(): void
     {
         try {
             $errno = null;
@@ -161,9 +162,10 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
     /**
      * Disconnect resource.
      *
+     * @return void
      * @throws \Berlioz\Mailer\Exception\TransportException
      */
-    private function disconnect()
+    private function disconnect(): void
     {
         try {
             if (is_resource($this->resource)) {
@@ -192,7 +194,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
      *
      * @return bool
      */
-    private function isConnected()
+    private function isConnected(): bool
     {
         return is_resource($this->resource);
     }
@@ -226,9 +228,10 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
      *
      * @param $data
      *
+     * @return void
      * @throws \Berlioz\Mailer\Exception\TransportException
      */
-    private function write($data)
+    private function write($data): void
     {
         if ($this->isConnected()) {
             if (is_array($data)) {
@@ -253,7 +256,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
     /**
      * @inheritdoc
      */
-    public function send(\Berlioz\Mailer\Mail $mail)
+    public function send(\Berlioz\Mailer\Mail $mail): void
     {
         $response = '';
 
@@ -338,7 +341,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
     /**
      * @inheritdoc
      */
-    public function massSend(\Berlioz\Mailer\Mail $mail, array $addresses, callable $callback = null)
+    public function massSend(\Berlioz\Mailer\Mail $mail, array $addresses, callable $callback = null): void
     {
         if (!$this->isConnected()) {
             $this->connect();
@@ -356,7 +359,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
      *
      * @return void
      */
-    private function log($level, $message, array $context = [])
+    private function log($level, $message, array $context = []): void
     {
         // Log
         if (!is_null($this->logger)) {

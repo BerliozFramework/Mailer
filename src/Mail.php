@@ -130,9 +130,9 @@ class Mail
     /**
      * Get from address.
      *
-     * @return \Berlioz\Mailer\Address
+     * @return \Berlioz\Mailer\Address|null
      */
-    public function getFrom(): Address
+    public function getFrom(): ?Address
     {
         return $this->from;
     }
@@ -255,9 +255,9 @@ class Mail
     /**
      * Get subject.
      *
-     * @return string
+     * @return string|null
      */
-    public function getSubject(): string
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
@@ -279,9 +279,9 @@ class Mail
     /**
      * Get text.
      *
-     * @return string
+     * @return string|null
      */
-    public function getText(): string
+    public function getText(): ?string
     {
         return $this->text;
     }
@@ -315,9 +315,9 @@ class Mail
      *
      * @param bool $minified (default: false)
      *
-     * @return string
+     * @return string|null
      */
-    public function getHtml(bool $minified = false): string
+    public function getHtml(bool $minified = false): ?string
     {
         if ($minified) {
             // Save and change PHP configuration value

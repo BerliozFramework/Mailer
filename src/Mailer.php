@@ -145,9 +145,10 @@ class Mailer implements LoggerAwareInterface
      *
      * @param \Berlioz\Mailer\Mail $mail Mail
      *
+     * @return void
      * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
      */
-    public function send(Mail $mail)
+    public function send(Mail $mail): void
     {
         $this->getTransport()->send($mail);
     }
@@ -159,9 +160,10 @@ class Mailer implements LoggerAwareInterface
      * @param \Berlioz\Mailer\Address[] $addresses Address list
      * @param callable                  $callback  Callback called after each email sent
      *
+     * @return void
      * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
      */
-    public function massSend(Mail $mail, array $addresses, callable $callback = null)
+    public function massSend(Mail $mail, array $addresses, callable $callback = null): void
     {
         $this->getTransport()->massSend($mail, $addresses, $callback);
     }
