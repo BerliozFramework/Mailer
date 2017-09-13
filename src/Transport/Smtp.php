@@ -200,9 +200,9 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
     /**
      * Get the resource data.
      *
-     * @param mixed $response
+     * @param mixed $response Complete response
      *
-     * @return bool|string
+     * @return bool|string Return code of SMTP command
      * @throws \Berlioz\Mailer\Exception\TransportException
      */
     private function get(&$response = null)
