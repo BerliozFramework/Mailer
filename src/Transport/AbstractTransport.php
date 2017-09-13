@@ -164,7 +164,7 @@ abstract class AbstractTransport implements TransportInterface
                                       mb_detect_encoding($mail->getHtml()));
                 $contents[] = 'Content-Transfer-Encoding: quoted-printable';
                 $contents[] = '';
-                $contents = array_merge($contents, str_split(quoted_printable_encode(str_replace(["\r", "\n"], '', $mail->getHtml())), 77));
+                $contents = array_merge($contents, explode(PHP_EOL, quoted_printable_encode($mail->getHtml(true))));
                 $contents[] = '';
 
                 if (count($htmlAttachments) > 0) {
