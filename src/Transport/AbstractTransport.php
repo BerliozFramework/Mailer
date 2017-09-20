@@ -122,7 +122,6 @@ abstract class AbstractTransport implements TransportInterface
                 $contents[] = 'This is a multi-part message in MIME format.';
                 $contents[] = '';
                 $contents[] = sprintf('--%s', $this->getBoundary('mixed'));
-                $contents[] = '';
             }
             // If has text and html
             if ($mail->hasText() && $mail->hasHtml()) {
@@ -131,7 +130,6 @@ abstract class AbstractTransport implements TransportInterface
                 $contents[] = 'This is a multi-part message in MIME format.';
                 $contents[] = '';
                 $contents[] = sprintf('--%s', $this->getBoundary('alternative'));
-                $contents[] = '';
             }
 
             // Text
@@ -157,7 +155,6 @@ abstract class AbstractTransport implements TransportInterface
                     $contents[] = 'This is a multi-part message in MIME format.';
                     $contents[] = '';
                     $contents[] = sprintf('--%s', $this->getBoundary('related'));
-                    $contents[] = '';
                 }
 
                 $contents[] = sprintf('Content-Type: text/html; charset="%s"; format=flowed; delsp=yes',
@@ -175,6 +172,7 @@ abstract class AbstractTransport implements TransportInterface
                                               $attachment->getType(),
                                               $attachment->getName());
                         $contents[] = 'Content-Transfer-Encoding: base64';
+                        $contents[] = 'Content-Disposition: inline';
                         $contents[] = sprintf('Content-ID: <%s>', $attachment->getId());
                         $contents[] = '';
                         $contents = array_merge($contents, str_split(base64_encode($attachment->getContents()), 77));
