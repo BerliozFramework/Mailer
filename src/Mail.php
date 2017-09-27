@@ -328,7 +328,7 @@ class Mail
                 ini_set('pcre.recursion_limit', '16777');
             }
 
-            $regex = <<<EOT
+            $regex = <<<'EOD'
 %# Collapse whitespace everywhere but in blacklisted elements.
 (?>             # Match all whitespans other than single space.
   [^\S ]\s*     # Either one [\t\r\n\f\v] and zero or more ws,
@@ -348,7 +348,7 @@ class Mail
   )             # End alternation group.
 )  # If we made it here, we are not in a blacklist tag.
 %Six
-EOT;
+EOD;
 
             // Reset PHP configuration value
             ini_set('pcre.recursion_limit', $oldPcreRecursionLimit);
