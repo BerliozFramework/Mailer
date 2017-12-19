@@ -91,10 +91,8 @@ class Mailer implements LoggerAwareInterface
      * Sets a logger.
      *
      * @param LoggerInterface $logger
-     *
-     * @return static
      */
-    public function setLogger(LoggerInterface $logger): Mailer
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
 
@@ -103,8 +101,6 @@ class Mailer implements LoggerAwareInterface
             $transport = $this->transport;
             $transport->setLogger($this->logger);
         }
-
-        return $this;
     }
 
     /**
