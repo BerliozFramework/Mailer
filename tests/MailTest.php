@@ -14,12 +14,14 @@ namespace Berlioz\Mailer\Tests;
 
 
 use Berlioz\Mailer\Address;
+use Berlioz\Mailer\Exception\InvalidArgumentException;
 use Berlioz\Mailer\Mail;
 use PHPUnit\Framework\TestCase;
 
 class MailTest extends TestCase
 {
-    const TEST_HEADERS = ['Content-Type' => 'test/test', 'To' => 'ronan.giron@berlioz-framework.com'];
+    const TEST_HEADERS = ['Content-Type' => 'test/test', 'DKIM' => 'azerty'];
+    const TEST_INVALID_HEADERS = ['Content-Type' => 'test/test', 'To' => 'ronan.giron@berlioz-framework.com'];
 
     public function testSetHeaders()
     {
@@ -57,7 +59,14 @@ class MailTest extends TestCase
 
         $this->assertTrue(is_array($reflectionProp->getValue($mail)['Content-Type']));
         $this->assertEquals(['test2/test2'], $reflectionProp->getValue($mail)['Content-Type']);
-        $this->assertEquals(['ronan.giron@berlioz-framework.com'], $reflectionProp->getValue($mail)['To']);
+        $this->assertEquals(['azerty'], $reflectionProp->getValue($mail)['DKIM']);
+    }
+
+    public function testReserverdHeader()
+    {
+        $mail = new Mail;
+        $this->expectException(InvalidArgumentException::class);
+        $mail->setHeaders(self::TEST_INVALID_HEADERS);
     }
 
     public function testAccessors()

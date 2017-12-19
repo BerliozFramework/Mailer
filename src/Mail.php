@@ -13,6 +13,8 @@
 namespace Berlioz\Mailer;
 
 
+use Berlioz\Mailer\Exception\InvalidArgumentException;
+
 class Mail
 {
     const RESERVED_HEADERS = ['Subject', 'From', 'To', 'Cc', 'Cci'];
@@ -36,7 +38,7 @@ class Mail
     private $attachments;
 
     /**
-     * Get headers.
+     * Get additional headers.
      *
      * @return array
      */
@@ -46,56 +48,22 @@ class Mail
     }
 
     /**
-     * Get final headers.
+     * Set additional headers.
      *
-     * Note: This method is used by transport, users use getHeaders().
-     *
-     * @return string[]
-     */
-    public function getFinalHeaders(): array
-    {
-        $headers = [];
-
-        $headers['Subject'] = [$this->getSubject()];
-
-        // From and recipients
-        {
-            $headers['From'] = [(string) $this->getFrom()];
-
-            if (count($this->getTo()) > 0) {
-                $headers['To'] = [implode(', ', $this->getTo())];
-            } else {
-                $headers['To'] = ['To: undisclosed-recipients:;'];
-            }
-
-            if (count($this->getCc()) > 0) {
-                $headers['Cc'] = [implode(', ', $this->getCc())];
-            }
-
-            if (count($this->getCci()) > 0) {
-                $headers['Cci'] = [implode(', ', $this->getCci())];
-            }
-        }
-
-        // Headers
-        foreach ($this->getHeaders() as $name => $values) {
-            if (!in_array($name, self::RESERVED_HEADERS)) {
-                $headers[$name] = (array) $values;
-            }
-        }
-
-        return $headers;
-    }
-
-    /**
-     * Set headers.
+     * WARNING: headers values needs to be encoded before!
      *
      * @param array $headers
      *
      * @return static
+     * @throws \Berlioz\Mailer\Exception\InvalidArgumentException if one reserved headers is used.
      */
     public function setHeaders(array $headers): Mail
     {
+        // Check reserved headers
+        if (count(array_intersect(array_keys($headers), self::RESERVED_HEADERS)) > 0) {
+            throw new InvalidArgumentException(sprintf('"%s" are reserved headers, use internal functions instead', implode(', ', self::RESERVED_HEADERS)));
+        }
+
         $headers =
             array_map(
                 function ($value) {
@@ -108,16 +76,24 @@ class Mail
     }
 
     /**
-     * Add header.
+     * Add additional header.
+     *
+     * WARNING: header value needs to be encoded before!
      *
      * @param string $name    Name
      * @param string $value   Value
      * @param bool   $replace Replacement if same header present
      *
      * @return static
+     * @throws \Berlioz\Mailer\Exception\InvalidArgumentException if reserved header is used.
      */
-    public function addHeader(string $name, string $value, bool $replace = false): Mail
+    public function addHeader(string $name, $value, bool $replace = false): Mail
     {
+        // Check reserved headers
+        if (in_array($name, self::RESERVED_HEADERS)) {
+            throw new InvalidArgumentException(sprintf('"%s" is a reserved header, use internal functions instead', $name));
+        }
+
         if (isset($this->headers[$name]) && $replace == false) {
             $this->headers[$name][] = $value;
         } else {

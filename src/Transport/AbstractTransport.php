@@ -66,18 +66,45 @@ abstract class AbstractTransport implements TransportInterface
     {
         array_walk($exclude, 'mb_strtolower');
         $contents = [];
-        $headers = $mail->getFinalHeaders();
+
+        // Get headers
+        $headers = $mail->getHeaders();
         $headers['MIME-Version'] = ['1.0'];
+        if (!in_array('subject', $exclude)) {
+            $headers['Subject'] = [$mail->getSubject()];
+        }
+
+        // Addresses
+        {
+            if (!in_array('from', $exclude)) {
+                $contents[] = sprintf('%s: %s', 'From', (string) $mail->getFrom());
+            }
+
+            if (!in_array('to', $exclude)) {
+                if (count($mail->getTo()) > 0) {
+                    $contents[] = sprintf('%s: %s', 'To', implode(', ', $mail->getTo()));
+                } else {
+                    $contents[] = 'To: undisclosed-recipients:;';
+                }
+            }
+
+            if (!in_array('cc', $exclude)) {
+                if (count($mail->getCc()) > 0) {
+                    $contents[] = sprintf('%s: %s', 'Cc', implode(', ', $mail->getCc()));
+                }
+            }
+
+            if (!in_array('cci', $exclude)) {
+                if (count($mail->getCci()) > 0) {
+                    $contents[] = sprintf('%s: %s', 'Cci', implode(', ', $mail->getCci()));
+                }
+            }
+        }
 
         foreach ($headers as $name => $values) {
             if (!in_array(mb_strtolower($name), $exclude)) {
                 foreach ((array) $values as $value) {
-                    $contents[] = sprintf('%s: %s',
-                                          $name,
-                                          mb_encode_mimeheader($value,
-                                                               mb_internal_encoding(),
-                                                               'B',
-                                                               $this->getLineFeed()));
+                    $contents[] = sprintf('%s: %s', $name, trim($value));
                 }
             }
         }

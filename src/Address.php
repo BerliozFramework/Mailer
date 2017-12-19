@@ -27,6 +27,8 @@ class Address
      *
      * @param string|null $mail
      * @param string|null $name
+     *
+     * @throws \Berlioz\Mailer\Exception\InvalidArgumentException if email address isn\'t valid.
      */
     public function __construct(string $mail = null, string $name = null)
     {

@@ -44,9 +44,11 @@ class AddressTest extends TestCase
     public function testGetters()
     {
         $address = new Address('ronan.giron@berlioz-framework.com', 'Ronan Giron');
-
         $this->assertEquals('ronan.giron@berlioz-framework.com', $address->getMail());
         $this->assertEquals('Ronan Giron', $address->getName());
+
+        $address = new Address('ronan.giron@berlioz-framework.com', 'Ronàn Gïron');
+        $this->assertEquals('=?UTF-8?Q?Ron=C3=A0n=20G=C3=AFron?= <ronan.giron@berlioz-framework.com>', (string) $address);
     }
 
     public function testSetters()
