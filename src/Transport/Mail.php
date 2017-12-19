@@ -37,8 +37,8 @@ class Mail extends AbstractTransport implements TransportInterface
         // Mail
         $result = @mb_send_mail($to,
                                 $mail->getSubject(),
-                                implode("\r\n", $this->getContents($mail)),
-                                $headers);
+                                implode($this->getLineFeed(), $this->getContents($mail)),
+                                implode($this->getLineFeed(), $headers));
 
         if (!$result) {
             throw new TransportException('Unable to send mail with mb_send_mail() PHP function.');
