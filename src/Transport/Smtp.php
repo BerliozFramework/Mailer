@@ -54,6 +54,8 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
 
     /**
      * Smtp destructor.
+     *
+     * @throws \Berlioz\Mailer\Exception\TransportException if disconnection throw exception.
      */
     public function __destruct()
     {
@@ -181,7 +183,9 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
                     $this->log(LogLevel::DEBUG, sprintf('QUIT command response: %s', $response));
                 }
 
-                @fclose($this->resource);
+                if (@fclose($this->resource) === false) {
+                    throw new \RuntimeException(sprintf('Unable to close resource %s:%s', $this->host, $this->port));
+                }
                 $this->resource = false;
             }
         } catch (\Exception $e) {
