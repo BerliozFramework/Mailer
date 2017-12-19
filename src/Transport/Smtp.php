@@ -31,7 +31,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
     private $username;
     /** @var string Password */
     private $password;
-    /** @var resource Resource */
+    /** @var resource|false Resource */
     private $resource;
     /** @var string Last request */
     private $lastRequest;
