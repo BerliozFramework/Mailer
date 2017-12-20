@@ -183,7 +183,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
                     $this->log(LogLevel::DEBUG, sprintf('QUIT command response: %s', $response));
                 }
 
-                if (@fclose($this->resource) === false) {
+                if (is_resource($this->resource) && @fclose($this->resource) === false) {
                     throw new \RuntimeException(sprintf('Unable to close resource %s:%s', $this->host, $this->port));
                 }
                 $this->resource = false;
