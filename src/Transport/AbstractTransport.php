@@ -94,9 +94,9 @@ abstract class AbstractTransport implements TransportInterface
                 }
             }
 
-            if (!in_array('cci', $exclude)) {
-                if (count($mail->getCci()) > 0) {
-                    $contents[] = sprintf('%s: %s', 'Cci', implode(', ', $mail->getCci()));
+            if (!in_array('bcc', $exclude)) {
+                if (count($mail->getBcc()) > 0) {
+                    $contents[] = sprintf('%s: %s', 'Bcc', implode(', ', $mail->getBcc()));
                 }
             }
         }

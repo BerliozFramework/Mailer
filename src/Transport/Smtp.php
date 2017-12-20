@@ -282,7 +282,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
 
                 // Addresses
                 {
-                    $addresses = array_merge($mail->getTo(), $mail->getCc(), $mail->getCci());
+                    $addresses = array_merge($mail->getTo(), $mail->getCc(), $mail->getBcc());
                     if (count($addresses) > 0) {
                         /** @var \Berlioz\Mailer\Address $address */
                         foreach ($addresses as $address) {

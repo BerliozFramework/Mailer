@@ -76,7 +76,7 @@ class MailTest extends TestCase
         $addressTo2 = new Address('ronan3@berlioz-framework.com');
         $addressCc1 = new Address('ronan4@berlioz-framework.com');
         $addressCc2 = new Address('ronan5@berlioz-framework.com');
-        $addressCci1 = new Address('ronan6@berlioz-framework.com');
+        $addressBcc1 = new Address('ronan6@berlioz-framework.com');
 
         $subject = 'My email subject';
         $text = 'Libertatis patrimonii.';
@@ -87,7 +87,7 @@ class MailTest extends TestCase
         $mail->setFrom($addressFrom);
         $mail->setTo([$addressTo1, $addressTo2]);
         $mail->setCc([$addressCc1, $addressCc2]);
-        $mail->setCci([$addressCci1]);
+        $mail->setBcc([$addressBcc1]);
         $this->assertTrue(!$mail->hasText());
         $mail->setText($text);
         $this->assertTrue(!$mail->hasHtml());
@@ -100,6 +100,6 @@ class MailTest extends TestCase
         $this->assertEquals($html, $mail->getHtml());
         $this->assertEquals([$addressTo1, $addressTo2], $mail->getTo());
         $this->assertEquals([$addressCc1, $addressCc2], $mail->getCc());
-        $this->assertEquals([$addressCci1], $mail->getCci());
+        $this->assertEquals([$addressBcc1], $mail->getBcc());
     }
 }

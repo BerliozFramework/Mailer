@@ -17,7 +17,7 @@ use Berlioz\Mailer\Exception\InvalidArgumentException;
 
 class Mail
 {
-    const RESERVED_HEADERS = ['Subject', 'From', 'To', 'Cc', 'Cci'];
+    const RESERVED_HEADERS = ['Subject', 'From', 'To', 'Cc', 'Bcc'];
     /** @var array Headers */
     private $headers;
     /** @var \Berlioz\Mailer\Address From */
@@ -26,8 +26,8 @@ class Mail
     private $to;
     /** @var \Berlioz\Mailer\Address[] Cc */
     private $cc;
-    /** @var \Berlioz\Mailer\Address[] Cci */
-    private $cci;
+    /** @var \Berlioz\Mailer\Address[] Bcc */
+    private $bcc;
     /** @var string Subject */
     private $subject;
     /** @var string Text body */
@@ -186,27 +186,27 @@ class Mail
     }
 
     /**
-     * Get cci addresses.
+     * Get bcc addresses.
      *
      * @return \Berlioz\Mailer\Address[]
      */
-    public function getCci(): array
+    public function getBcc(): array
     {
-        return $this->cci ?? [];
+        return $this->bcc ?? [];
     }
 
     /**
-     * Set cci addresses.
+     * Set bcc addresses.
      *
-     * @param \Berlioz\Mailer\Address[] $cci
+     * @param \Berlioz\Mailer\Address[] $bcc
      *
      * @return static
      */
-    public function setCci(array $cci): Mail
+    public function setBcc(array $bcc): Mail
     {
-        $this->cci =
+        $this->bcc =
             array_filter(
-                $cci,
+                $bcc,
                 function ($value) {
                     return $value instanceof Address;
                 });
@@ -217,13 +217,13 @@ class Mail
     /**
      * Reset recipients.
      *
-     * Note: reset arrays to, cc and cci; from address is keep.
+     * Note: reset arrays to, cc and bcc; from address is keep.
      *
      * @return static
      */
     public function resetRecipients(): Mail
     {
-        $this->to = $this->cc = $this->cci = [];
+        $this->to = $this->cc = $this->bcc = [];
 
         return $this;
     }
