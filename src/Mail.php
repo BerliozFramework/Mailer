@@ -94,7 +94,7 @@ class Mail
             throw new InvalidArgumentException(sprintf('"%s" is a reserved header, use internal functions instead', $name));
         }
 
-        if (isset($this->headers[$name]) && $replace == false) {
+        if (isset($this->headers[$name]) && $replace === false) {
             $this->headers[$name][] = $value;
         } else {
             $this->headers[$name] = [$value];
