@@ -19,9 +19,10 @@ class Mail extends AbstractTransport implements TransportInterface
 {
     /**
      * @inheritdoc
+     * @return bool
      * @throws \Berlioz\Mailer\Exception\TransportException
      */
-    public function send(\Berlioz\Mailer\Mail $mail): void
+    public function send(\Berlioz\Mailer\Mail $mail)
     {
         // To
         $toAddresses = $mail->getTo();
@@ -43,5 +44,7 @@ class Mail extends AbstractTransport implements TransportInterface
         if (!$result) {
             throw new TransportException('Unable to send mail with mb_send_mail() PHP function.');
         }
+
+        return $result;
     }
 }

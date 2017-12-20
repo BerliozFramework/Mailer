@@ -29,10 +29,10 @@ interface TransportInterface
      *
      * @param \Berlioz\Mailer\Mail $mail Mail
      *
-     * @return void
+     * @return mixed Depends of transport
      * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
      */
-    public function send(\Berlioz\Mailer\Mail $mail): void;
+    public function send(\Berlioz\Mailer\Mail $mail);
 
     /**
      * Mass sending of email.
@@ -41,8 +41,8 @@ interface TransportInterface
      * @param \Berlioz\Mailer\Address[] $addresses Address list
      * @param callable                  $callback  Callback called after each email sent
      *
-     * @return void
+     * @return mixed Depends of transport
      * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
      */
-    public function massSend(\Berlioz\Mailer\Mail $mail, array $addresses, callable $callback = null): void;
+    public function massSend(\Berlioz\Mailer\Mail $mail, array $addresses, callable $callback = null);
 }

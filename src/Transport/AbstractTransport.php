@@ -20,9 +20,12 @@ abstract class AbstractTransport implements TransportInterface
 
     /**
      * @inheritdoc
+     * @return array
      */
-    public function massSend(\Berlioz\Mailer\Mail $mail, array $addresses, callable $callback = null): void
+    public function massSend(\Berlioz\Mailer\Mail $mail, array $addresses, callable $callback = null)
     {
+        $result = [];
+
         $i = 0;
         /** @var \Berlioz\Mailer\Address $address */
         foreach ($addresses as $address) {
@@ -31,7 +34,7 @@ abstract class AbstractTransport implements TransportInterface
             $mail->setTo(is_array($address) ? $address : [$address]);
 
             // Send
-            $this->send($mail);
+            $result[] = $this->send($mail);
 
             if (is_callable($callback)) {
                 $callback($address, $i);
@@ -42,6 +45,8 @@ abstract class AbstractTransport implements TransportInterface
 
         // And... reset ;)
         $mail->resetRecipients();
+
+        return $result;
     }
 
     /**

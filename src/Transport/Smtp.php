@@ -33,10 +33,6 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
     private $password;
     /** @var resource|false Resource */
     private $resource;
-    /** @var string Last request */
-    private $lastRequest;
-    /** @var string Last response */
-    private $lastResponse;
 
     public function __construct(string $host = null,
                                 string $username = null,
@@ -218,7 +214,6 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
                 throw new TransportException('Reading failed');
             } else {
                 $response = trim($response);
-                $this->lastResponse = $response;
 
                 return substr($response, 0, 3);
             }
@@ -242,8 +237,6 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
                 $data = implode($this->getLineFeed(), $data);
             }
 
-            $this->lastRequest = $data;
-
             // Windows
             if (stristr(PHP_OS, 'WIN')) {
                 $data = str_replace("\n.", "\n..", $data);
@@ -259,8 +252,9 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
 
     /**
      * @inheritdoc
+     * @return void
      */
-    public function send(\Berlioz\Mailer\Mail $mail): void
+    public function send(\Berlioz\Mailer\Mail $mail)
     {
         $response = '';
 
@@ -344,8 +338,9 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
 
     /**
      * @inheritdoc
+     * @return void
      */
-    public function massSend(\Berlioz\Mailer\Mail $mail, array $addresses, callable $callback = null): void
+    public function massSend(\Berlioz\Mailer\Mail $mail, array $addresses, callable $callback = null)
     {
         if (!$this->isConnected()) {
             $this->connect();
