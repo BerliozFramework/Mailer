@@ -77,6 +77,7 @@ $html .= '<p>Html content 2</p>';
 $mail->setHtml($html);
 ```
 
+**WARNING:** call `$attachment->getId()` method, does that the attachment will be in inline disposition. Only uses this method for inline attachments.
 
 ### Transports
 
