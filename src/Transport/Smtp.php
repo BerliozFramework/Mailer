@@ -121,7 +121,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
             // Log
             $this->log(LogLevel::DEBUG, sprintf('Connection response: %s', $response));
 
-            $this->write($request = "HELO " . trim(gethostname()));
+            $this->write("HELO " . trim(gethostname()));
 
             if ($this->get($response) != "250") {
                 // Log
