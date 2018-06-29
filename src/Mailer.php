@@ -44,46 +44,46 @@ class Mailer implements LoggerAwareInterface
 
             if (is_array($options['transport'])) {
                 if (!empty($options['transport']['name'])) {
-                    if (!empty(self::DEFAULT_TRANSPORTS[$options['transport']['name']])) {
-                        $className = self::DEFAULT_TRANSPORTS[$options['transport']['name']];
-                    } else {
+                    if (empty(self::DEFAULT_TRANSPORTS[$options['transport']['name']])) {
                         throw new InvalidArgumentException(sprintf('Unknown "%s" default transport', $options['transport']['name']));
                     }
+
+                    $className = self::DEFAULT_TRANSPORTS[$options['transport']['name']];
                 } else {
-                    if (!empty($options['transport']['class'])) {
-                        $className = $options['transport']['class'];
-                    } else {
+                    if (empty($options['transport']['class'])) {
                         throw new InvalidArgumentException('Missing class name in "transport" options');
                     }
+
+                    $className = $options['transport']['class'];
                 }
 
                 if (!empty($options['transport']['arguments'])) {
-                    if (is_array($options['transport']['arguments'])) {
-                        $classArgs = $options['transport']['arguments'];
-                    } else {
+                    if (!is_array($options['transport']['arguments'])) {
                         throw new InvalidArgumentException('Class arguments of "transport" options must be an array');
                     }
+
+                    $classArgs = $options['transport']['arguments'];
                 }
             } else {
-                if (is_string($options['transport'])) {
-                    $className = $options['transport'];
-                } else {
+                if (!is_string($options['transport'])) {
                     throw new InvalidArgumentException('"transport" options must be an array or a valid class name');
                 }
+
+                $className = $options['transport'];
             }
 
-            if (class_exists($className)) {
-                $class = new \ReflectionClass($className);
-                $object = $class->newInstanceArgs($classArgs);
-
-                if ($object instanceof TransportInterface) {
-                    $this->setTransport($object);
-                } else {
-                    throw new InvalidArgumentException('Transport class must be an instance of \Berlioz\Mailer\Transport\TransportInterface interface');
-                }
-            } else {
+            if (!class_exists($className)) {
                 throw new InvalidArgumentException(sprintf('Class "%s" doesn\'t exists', $className));
             }
+
+            $class = new \ReflectionClass($className);
+            $object = $class->newInstanceArgs($classArgs);
+
+            if (!$object instanceof TransportInterface) {
+                throw new InvalidArgumentException('Transport class must be an instance of \Berlioz\Mailer\Transport\TransportInterface interface');
+            }
+
+            $this->setTransport($object);
         }
     }
 
