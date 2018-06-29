@@ -25,9 +25,8 @@ class Mail extends AbstractTransport implements TransportInterface
     {
         // To
         $toAddresses = $mail->getTo();
-        if (count($toAddresses) > 0) {
-            $to = implode(', ', $toAddresses);
-        } else {
+        $to = implode(', ', $toAddresses);
+        if (empty($to)) {
             $to = 'undisclosed-recipients:;';
         }
 
