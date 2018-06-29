@@ -12,7 +12,6 @@
 
 namespace Berlioz\Mailer;
 
-
 use Berlioz\Mailer\Exception\InvalidArgumentException;
 use Berlioz\Mailer\Transport\Mail as MailTransport;
 use Berlioz\Mailer\Transport\TransportInterface;
@@ -35,6 +34,7 @@ class Mailer implements LoggerAwareInterface
      * @param array $options
      *
      * @throws \Berlioz\Mailer\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function __construct(array $options = [])
     {

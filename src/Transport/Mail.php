@@ -12,7 +12,6 @@
 
 namespace Berlioz\Mailer\Transport;
 
-
 use Berlioz\Mailer\Exception\TransportException;
 
 class Mail extends AbstractTransport implements TransportInterface

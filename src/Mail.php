@@ -12,7 +12,6 @@
 
 namespace Berlioz\Mailer;
 
-
 use Berlioz\Mailer\Exception\InvalidArgumentException;
 
 class Mail

@@ -12,7 +12,6 @@
 
 namespace Berlioz\Mailer\Transport;
 
-
 use Berlioz\Mailer\Exception\TransportException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;

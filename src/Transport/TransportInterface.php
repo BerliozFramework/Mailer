@@ -12,7 +12,6 @@
 
 namespace Berlioz\Mailer\Transport;
 
-
 interface TransportInterface
 {
     /**

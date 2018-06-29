@@ -12,7 +12,6 @@
 
 namespace Berlioz\Mailer\Exception;
 
-
 class TransportException extends MailerException
 {
 }

@@ -12,7 +12,6 @@
 
 namespace Berlioz\Mailer\Transport;
 
-
 abstract class AbstractTransport implements TransportInterface
 {
     /** @var string[] Boundaries */

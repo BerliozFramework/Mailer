@@ -12,7 +12,6 @@
 
 namespace Berlioz\Mailer;
 
-
 class Attachment
 {
     /** @var string Id */
