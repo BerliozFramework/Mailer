@@ -48,14 +48,12 @@ class Address
     {
         // E-mail
         if (mb_strlen($this->name) > 0) {
-            $str = sprintf('%s <%s>',
+            return sprintf('%s <%s>',
                            mb_encode_mimeheader($this->name, mb_detect_encoding($this->name), 'Q'),
                            $this->mail);
-        } else {
-            $str = $this->mail;
         }
 
-        return $str;
+        return $this->mail;
     }
 
     /**

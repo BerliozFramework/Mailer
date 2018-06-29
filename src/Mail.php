@@ -329,9 +329,9 @@ EOD;
             ini_set('pcre.recursion_limit', $oldPcreRecursionLimit);
 
             return preg_replace($regex, ' ', $this->html);
-        } else {
-            return $this->html;
         }
+
+        return $this->html;
     }
 
     /**
