@@ -232,11 +232,11 @@ class Mail
     /**
      * Get subject.
      *
-     * @return string|null
+     * @return string
      */
-    public function getSubject(): ?string
+    public function getSubject(): string
     {
-        return $this->subject;
+        return $this->subject ?? '';
     }
 
     /**

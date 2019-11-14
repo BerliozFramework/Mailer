@@ -49,7 +49,7 @@ class Address
     public function __toString(): string
     {
         // E-mail
-        if (mb_strlen($this->name) > 0) {
+        if (null !== $this->name && mb_strlen($this->name) > 0) {
             return sprintf('%s <%s>',
                            mb_encode_mimeheader($this->name, mb_detect_encoding($this->name), 'Q'),
                            $this->mail);
