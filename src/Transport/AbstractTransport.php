@@ -167,7 +167,7 @@ abstract class AbstractTransport implements TransportInterface
                                       mb_detect_encoding($mail->getText()));
                 $contents[] = 'Content-Transfer-Encoding: base64';
                 $contents[] = '';
-                $contents = array_merge($contents, str_split(base64_encode($mail->getText()), 77));
+                $contents = array_merge($contents, str_split(base64_encode($mail->getText()), 76));
                 $contents[] = '';
             }
 
@@ -204,7 +204,7 @@ abstract class AbstractTransport implements TransportInterface
                         $contents[] = 'Content-Disposition: inline';
                         $contents[] = sprintf('Content-ID: <%s>', $attachment->getId());
                         $contents[] = '';
-                        $contents = array_merge($contents, str_split(base64_encode($attachment->getContents()), 77));
+                        $contents = array_merge($contents, str_split(base64_encode($attachment->getContents()), 76));
                         $contents[] = '';
                     }
                     $contents[] = sprintf('--%s--', $this->getBoundary('related'));
@@ -223,7 +223,7 @@ abstract class AbstractTransport implements TransportInterface
                     $contents[] = 'Content-Disposition: attachment;';
                     $contents[] = sprintf('    filename="%s"', $attachment->getName());
                     $contents[] = '';
-                    $contents = array_merge($contents, str_split(base64_encode($attachment->getContents()), 77));
+                    $contents = array_merge($contents, str_split(base64_encode($attachment->getContents()), 76));
                     $contents[] = '';
                 }
                 $contents[] = sprintf('--%s--', $this->getBoundary('mixed'));
