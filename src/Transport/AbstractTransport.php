@@ -262,7 +262,7 @@ abstract class AbstractTransport implements TransportInterface
             $this->boundaries[$type] = '--' . ($prefix ? $prefix . '-' : '');
 
             for ($i = 0; $i < ($length - 2); $i++) {
-                $this->boundaries[$type] .= $source{mt_rand(1, $n) - 1};
+                $this->boundaries[$type] .= $source[mt_rand(1, $n) - 1];
             }
 
             $this->boundaries[$type] = substr($this->boundaries[$type], 0, $length);
