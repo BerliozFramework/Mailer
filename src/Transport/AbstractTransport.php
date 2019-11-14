@@ -70,7 +70,7 @@ abstract class AbstractTransport implements TransportInterface
      */
     protected function getHeaders(\Berlioz\Mailer\Mail $mail, array $exclude = []): array
     {
-        array_walk($exclude, 'mb_strtolower');
+        $exclude = array_map('mb_strtolower', $exclude);
         $contents = [];
 
         // Get headers
