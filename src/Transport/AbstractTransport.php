@@ -63,8 +63,8 @@ abstract class AbstractTransport implements TransportInterface
      *
      * Note: This method is used by transport, users use getHeaders().
      *
-     * @param \Berlioz\Mailer\Mail $mail    Mail
-     * @param array                $exclude Headers to exclude
+     * @param \Berlioz\Mailer\Mail $mail Mail
+     * @param array $exclude Headers to exclude
      *
      * @return string[]
      */
@@ -83,7 +83,7 @@ abstract class AbstractTransport implements TransportInterface
         // Addresses
         {
             if (!in_array('from', $exclude)) {
-                $contents[] = sprintf('%s: %s', 'From', (string) $mail->getFrom());
+                $contents[] = sprintf('%s: %s', 'From', (string)$mail->getFrom());
             }
 
             if (!in_array('to', $exclude)) {
@@ -105,7 +105,7 @@ abstract class AbstractTransport implements TransportInterface
 
         foreach ($headers as $name => $values) {
             if (!in_array(mb_strtolower($name), $exclude)) {
-                foreach ((array) $values as $value) {
+                foreach ((array)$values as $value) {
                     $contents[] = sprintf('%s: %s', $name, trim($value));
                 }
             }
@@ -133,14 +133,16 @@ abstract class AbstractTransport implements TransportInterface
                 function ($attachment) {
                     /** @var \Berlioz\Mailer\Attachment $attachment */
                     return $attachment->hasId();
-                });
+                }
+            );
         $attachments =
             array_filter(
                 $attachments,
                 function ($attachment) {
                     /** @var \Berlioz\Mailer\Attachment $attachment */
                     return !$attachment->hasId();
-                });
+                }
+            );
 
         // Contents
         {
@@ -163,8 +165,10 @@ abstract class AbstractTransport implements TransportInterface
 
             // Text
             if ($mail->hasText()) {
-                $contents[] = sprintf('Content-Type: text/plain; charset="%s"; format=flowed; delsp=yes',
-                                      mb_detect_encoding($mail->getText()));
+                $contents[] = sprintf(
+                    'Content-Type: text/plain; charset="%s"; format=flowed; delsp=yes',
+                    mb_detect_encoding($mail->getText())
+                );
                 $contents[] = 'Content-Transfer-Encoding: base64';
                 $contents[] = '';
                 $contents = array_merge($contents, str_split(base64_encode($mail->getText()), 76));
@@ -186,8 +190,10 @@ abstract class AbstractTransport implements TransportInterface
                     $contents[] = sprintf('--%s', $this->getBoundary('related'));
                 }
 
-                $contents[] = sprintf('Content-Type: text/html; charset="%s"; format=flowed; delsp=yes',
-                                      mb_detect_encoding($mail->getHtml()));
+                $contents[] = sprintf(
+                    'Content-Type: text/html; charset="%s"; format=flowed; delsp=yes',
+                    mb_detect_encoding($mail->getHtml())
+                );
                 $contents[] = 'Content-Transfer-Encoding: quoted-printable';
                 $contents[] = '';
                 $contents = array_merge($contents, explode("\r\n", quoted_printable_encode($mail->getHtml(true))));
@@ -197,9 +203,11 @@ abstract class AbstractTransport implements TransportInterface
                     /** @var \Berlioz\Mailer\Attachment $attachment */
                     foreach ($htmlAttachments as $attachment) {
                         $contents[] = sprintf('--%s', $this->getBoundary('related'));
-                        $contents[] = sprintf('Content-Type: %s; name="%s"',
-                                              $attachment->getType(),
-                                              $attachment->getName());
+                        $contents[] = sprintf(
+                            'Content-Type: %s; name="%s"',
+                            $attachment->getType(),
+                            $attachment->getName()
+                        );
                         $contents[] = 'Content-Transfer-Encoding: base64';
                         $contents[] = 'Content-Disposition: inline';
                         $contents[] = sprintf('Content-ID: <%s>', $attachment->getId());
@@ -216,9 +224,11 @@ abstract class AbstractTransport implements TransportInterface
                 /** @var \Berlioz\Mailer\Attachment $attachment */
                 foreach ($attachments as $attachment) {
                     $contents[] = sprintf('--%s', $this->getBoundary('mixed'));
-                    $contents[] = sprintf('Content-Type: %s; name="%s"',
-                                          $attachment->getType(),
-                                          $attachment->getName());
+                    $contents[] = sprintf(
+                        'Content-Type: %s; name="%s"',
+                        $attachment->getType(),
+                        $attachment->getName()
+                    );
                     $contents[] = 'Content-Transfer-Encoding: base64';
                     $contents[] = 'Content-Disposition: attachment;';
                     $contents[] = sprintf('    filename="%s"', $attachment->getName());
@@ -236,23 +246,26 @@ abstract class AbstractTransport implements TransportInterface
     /**
      * Get boundary.
      *
-     * @param string $type   Boundary type (mixed, related or alternative)
-     * @param int    $length Length of boundary
+     * @param string $type Boundary type (mixed, related or alternative)
+     * @param string|null $prefix Prefix
+     * @param int $length Length of boundary
      *
      * @return string
      */
-    private function getBoundary(string $type, $length = 24): string
+    private function getBoundary(string $type, string $prefix = null, int $length = 12): string
     {
         if (empty($this->boundaries[$type])) {
-            $source = '0123456789';
+            $source = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
             $length = abs(intval($length));
             $n = strlen($source);
-            $this->boundaries[$type] = '';
+            $this->boundaries[$type] = '--' . ($prefix ? $prefix . '-' : '');
 
-            for ($i = 0; $i < $length; $i++) {
+            for ($i = 0; $i < ($length - 2); $i++) {
                 $this->boundaries[$type] .= $source{mt_rand(1, $n) - 1};
             }
+
+            $this->boundaries[$type] = substr($this->boundaries[$type], 0, $length);
         }
 
         return $this->boundaries[$type];
