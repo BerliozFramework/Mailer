@@ -5,6 +5,7 @@ For change log format, use [Keep a Changelog] (http://keepachangelog.com/).
 
 ## [1.1.0] - 2019-11-14
 ### Changed
+- Fix deprecated (PHP7.4) array and string offset access syntax with curly braces
 - Truncate length of base64 fixed to 76 (for best SpamAssassin score)
 - Default length of boundaries fixed to 15 (for best SpamAssassin score)
 - Enabled strict types
