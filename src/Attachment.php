@@ -61,12 +61,12 @@ class Attachment
             // Construct content id
             $id = "part1.";
             for ($i = 0; $i < 8; $i++) {
-                $id .= $source{mt_rand(1, $n) - 1};
+                $id .= $source[mt_rand(1, $n) - 1];
             }
 
             $id .= ".";
             for ($i = 0; $i < 8; $i++) {
-                $id .= $source{mt_rand(1, $n) - 1};
+                $id .= $source[mt_rand(1, $n) - 1];
             }
 
             $id .= "@" . (is_null($domainName) ? "berlioz" : $domainName);
