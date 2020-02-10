@@ -3,11 +3,11 @@
   "description": "Berlioz Mailer",
   "minimum-stability": "stable",
   "license": "MIT",
-  "homepage": "http://www.berlioz-framework.com",
+  "homepage": "https://getberlioz.com",
   "authors": [
     {
       "name": "Ronan Giron",
-      "email": "ronan.giron@berlioz-framework.com"
+      "email": "ronan@getberlioz.com"
     }
   ],
   "autoload": {
@@ -27,6 +27,6 @@
     "psr/log": "^1.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^7.4"
+    "phpunit/phpunit": "^7.4 || ^8.0"
   }
 }
