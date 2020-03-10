@@ -1,6 +1,6 @@
 {
   "name": "berlioz/mailer",
-  "description": "Berlioz Mailer",
+  "description": "Berlioz Mailer is a PHP library for sending mail, with or without local server.",
   "minimum-stability": "stable",
   "license": "MIT",
   "homepage": "https://getberlioz.com",
