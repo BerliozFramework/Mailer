@@ -14,37 +14,12 @@ declare(strict_types=1);
 
 namespace Berlioz\Mailer\Transport;
 
-use Berlioz\Mailer\Exception\TransportException;
-
-class Mail extends AbstractTransport implements TransportInterface
+/**
+ * Class Mail.
+ *
+ * @package Berlioz\Mailer\Transport
+ * @deprecated 1.2.0 No longer used by internal code and not recommended. Use PhpMail instead.
+ */
+class Mail extends PhpMail
 {
-    /**
-     * @inheritdoc
-     * @return bool
-     * @throws \Berlioz\Mailer\Exception\TransportException
-     */
-    public function send(\Berlioz\Mailer\Mail $mail)
-    {
-        // To
-        $toAddresses = $mail->getTo();
-        $to = implode(', ', $toAddresses);
-        if (empty($to)) {
-            $to = 'undisclosed-recipients:;';
-        }
-
-        // Headers
-        $headers = $this->getHeaders($mail, ['To', 'Subject']);
-
-        // Mail
-        $result = @mb_send_mail($to,
-                                $mail->getSubject(),
-                                implode($this->getLineFeed(), $this->getContents($mail)),
-                                implode($this->getLineFeed(), $headers));
-
-        if (!$result) {
-            throw new TransportException('Unable to send mail with mb_send_mail() PHP function.');
-        }
-
-        return $result;
-    }
 }

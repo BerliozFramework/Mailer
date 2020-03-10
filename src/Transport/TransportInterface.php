@@ -14,6 +14,13 @@ declare(strict_types=1);
 
 namespace Berlioz\Mailer\Transport;
 
+use Berlioz\Mailer\Mail;
+
+/**
+ * Interface TransportInterface.
+ *
+ * @package Berlioz\Mailer\Transport
+ */
 interface TransportInterface
 {
     /**
@@ -33,17 +40,17 @@ interface TransportInterface
      * @return mixed Depends of transport
      * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
      */
-    public function send(\Berlioz\Mailer\Mail $mail);
+    public function send(Mail $mail);
 
     /**
      * Mass sending of email.
      *
-     * @param \Berlioz\Mailer\Mail      $mail      Mail
+     * @param \Berlioz\Mailer\Mail $mail Mail
      * @param \Berlioz\Mailer\Address[] $addresses Address list
-     * @param callable                  $callback  Callback called after each email sent
+     * @param callable $callback Callback called after each email sent
      *
      * @return mixed Depends of transport
      * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
      */
-    public function massSend(\Berlioz\Mailer\Mail $mail, array $addresses, callable $callback = null);
+    public function massSend(Mail $mail, array $addresses, callable $callback = null);
 }
