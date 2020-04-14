@@ -16,6 +16,11 @@ namespace Berlioz\Mailer;
 
 use Berlioz\Mailer\Exception\InvalidArgumentException;
 
+/**
+ * Class Address.
+ *
+ * @package Berlioz\Mailer
+ */
 class Address
 {
     /** @var string Name */
@@ -33,10 +38,10 @@ class Address
      */
     public function __construct(string $mail = null, string $name = null)
     {
-        if (!is_null($mail)) {
+        if (null !== $mail) {
             $this->setMail($mail);
         }
-        if (!is_null($name)) {
+        if (null !== $name) {
             $this->setName($name);
         }
     }
@@ -50,9 +55,11 @@ class Address
     {
         // E-mail
         if (null !== $this->name && mb_strlen($this->name) > 0) {
-            return sprintf('%s <%s>',
-                           mb_encode_mimeheader($this->name, mb_detect_encoding($this->name), 'Q'),
-                           $this->mail);
+            return sprintf(
+                '%s <%s>',
+                mb_encode_mimeheader($this->name, mb_detect_encoding($this->name), 'Q'),
+                $this->mail
+            );
         }
 
         return $this->mail;
@@ -102,11 +109,11 @@ class Address
      */
     public function setMail(string $mail): Address
     {
-        if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-            $this->mail = $mail;
-        } else {
+        if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
             throw new InvalidArgumentException(sprintf('"%s" isn\'t a valid email address', $mail));
         }
+
+        $this->mail = $mail;
 
         return $this;
     }

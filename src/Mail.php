@@ -16,9 +16,14 @@ namespace Berlioz\Mailer;
 
 use Berlioz\Mailer\Exception\InvalidArgumentException;
 
+/**
+ * Class Mail.
+ *
+ * @package Berlioz\Mailer
+ */
 class Mail
 {
-    const RESERVED_HEADERS = ['Subject', 'From', 'To', 'Cc', 'Bcc'];
+    protected const RESERVED_HEADERS = ['Subject', 'From', 'To', 'Cc', 'Bcc'];
     /** @var array Headers */
     private $headers;
     /** @var \Berlioz\Mailer\Address From */
@@ -62,15 +67,21 @@ class Mail
     {
         // Check reserved headers
         if (count(array_intersect(array_keys($headers), self::RESERVED_HEADERS)) > 0) {
-            throw new InvalidArgumentException(sprintf('"%s" are reserved headers, use internal functions instead', implode(', ', self::RESERVED_HEADERS)));
+            throw new InvalidArgumentException(
+                sprintf(
+                    '"%s" are reserved headers, use internal functions instead',
+                    implode(', ', self::RESERVED_HEADERS)
+                )
+            );
         }
 
         $headers =
             array_map(
                 function ($value) {
-                    return (array) $value;
+                    return (array)$value;
                 },
-                $headers);
+                $headers
+            );
         $this->headers = $headers;
 
         return $this;
@@ -81,9 +92,9 @@ class Mail
      *
      * WARNING: header value needs to be encoded before!
      *
-     * @param string $name    Name
-     * @param string $value   Value
-     * @param bool   $replace Replacement if same header present
+     * @param string $name Name
+     * @param string $value Value
+     * @param bool $replace Replacement if same header present
      *
      * @return static
      * @throws \Berlioz\Mailer\Exception\InvalidArgumentException if reserved header is used.
@@ -92,14 +103,18 @@ class Mail
     {
         // Check reserved headers
         if (in_array($name, self::RESERVED_HEADERS)) {
-            throw new InvalidArgumentException(sprintf('"%s" is a reserved header, use internal functions instead', $name));
+            throw new InvalidArgumentException(
+                sprintf('"%s" is a reserved header, use internal functions instead', $name)
+            );
         }
 
         if (isset($this->headers[$name]) && $replace === false) {
             $this->headers[$name][] = $value;
-        } else {
-            $this->headers[$name] = [$value];
+
+            return $this;
         }
+
+        $this->headers[$name] = [$value];
 
         return $this;
     }
@@ -147,12 +162,7 @@ class Mail
      */
     public function setTo(array $to): Mail
     {
-        $this->to =
-            array_filter(
-                $to,
-                function ($value) {
-                    return $value instanceof Address;
-                });
+        $this->to = $this->filterObjects($to, Address::class);
 
         return $this;
     }
@@ -176,12 +186,7 @@ class Mail
      */
     public function setCc(array $cc): Mail
     {
-        $this->cc =
-            array_filter(
-                $cc,
-                function ($value) {
-                    return $value instanceof Address;
-                });
+        $this->cc = $this->filterObjects($cc, Address::class);
 
         return $this;
     }
@@ -205,12 +210,7 @@ class Mail
      */
     public function setBcc(array $bcc): Mail
     {
-        $this->bcc =
-            array_filter(
-                $bcc,
-                function ($value) {
-                    return $value instanceof Address;
-                });
+        $this->bcc = $this->filterObjects($bcc, Address::class);
 
         return $this;
     }
@@ -293,19 +293,22 @@ class Mail
      * @param bool $minified (default: false)
      *
      * @return string|null
+     * @link https://www.generacodice.com/fr/articolo/1177075/Minifying-final-HTML-output-using-regular-expressions-with-CodeIgniter
      */
     public function getHtml(bool $minified = false): ?string
     {
-        if ($minified) {
-            // Save and change PHP configuration value
-            $oldPcreRecursionLimit = ini_get('pcre.recursion_limit');
-            if (PHP_OS == 'WIN') {
-                ini_set('pcre.recursion_limit', '524');
-            } else {
-                ini_set('pcre.recursion_limit', '16777');
-            }
+        if (!$minified) {
+            return $this->html;
+        }
 
-            $regex = <<<'EOD'
+        // Save and change PHP configuration value
+        $oldPcreRecursionLimit = ini_get('pcre.recursion_limit');
+        ini_set('pcre.recursion_limit', '16777');
+        if (PHP_OS == 'WIN') {
+            ini_set('pcre.recursion_limit', '524');
+        }
+
+        $regex = <<<'EOD'
 %# Collapse whitespace everywhere but in blacklisted elements.
 (?>             # Match all whitespans other than single space.
   [^\S ]\s*     # Either one [\t\r\n\f\v] and zero or more ws,
@@ -327,13 +330,10 @@ class Mail
 %Six
 EOD;
 
-            // Reset PHP configuration value
-            ini_set('pcre.recursion_limit', $oldPcreRecursionLimit);
+        // Reset PHP configuration value
+        ini_set('pcre.recursion_limit', $oldPcreRecursionLimit);
 
-            return preg_replace($regex, ' ', $this->html);
-        }
-
-        return $this->html;
+        return preg_replace($regex, ' ', $this->html);
     }
 
     /**
@@ -379,12 +379,7 @@ EOD;
      */
     public function setAttachments(array $attachments): Mail
     {
-        $this->attachments =
-            array_filter(
-                $attachments,
-                function ($value) {
-                    return $value instanceof Attachment;
-                });
+        $this->attachments = $this->filterObjects($attachments, Attachment::class);
 
         return $this;
     }
@@ -401,5 +396,24 @@ EOD;
         $this->attachments[] = $attachment;
 
         return $this;
+    }
+
+    /**
+     * Filter objects.
+     *
+     * @param object[] $objects
+     * @param string $classAttempted
+     *
+     * @return object[]
+     */
+    private function filterObjects(array $objects, string $classAttempted): array
+    {
+        return
+            array_filter(
+                $objects,
+                function ($value) use ($classAttempted) {
+                    return $value instanceof $classAttempted;
+                }
+            );
     }
 }

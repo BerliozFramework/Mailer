@@ -14,6 +14,13 @@ declare(strict_types=1);
 
 namespace Berlioz\Mailer\Transport;
 
+use Berlioz\Mailer\Mail;
+
+/**
+ * Class AbstractTransport.
+ *
+ * @package Berlioz\Mailer\Transport
+ */
 abstract class AbstractTransport implements TransportInterface
 {
     /** @var string[] Boundaries */
@@ -23,7 +30,7 @@ abstract class AbstractTransport implements TransportInterface
      * @inheritdoc
      * @return array
      */
-    public function massSend(\Berlioz\Mailer\Mail $mail, array $addresses, callable $callback = null)
+    public function massSend(Mail $mail, array $addresses, callable $callback = null)
     {
         $result = [];
 
@@ -68,7 +75,7 @@ abstract class AbstractTransport implements TransportInterface
      *
      * @return string[]
      */
-    protected function getHeaders(\Berlioz\Mailer\Mail $mail, array $exclude = []): array
+    protected function getHeaders(Mail $mail, array $exclude = []): array
     {
         $exclude = array_map('mb_strtolower', $exclude);
         $contents = [];
@@ -77,32 +84,34 @@ abstract class AbstractTransport implements TransportInterface
         $headers = $mail->getHeaders();
         $headers['MIME-Version'] = ['1.0'];
         if (!in_array('subject', $exclude)) {
-            $headers['Subject'] = [mb_encode_mimeheader($mail->getSubject(), mb_detect_encoding($mail->getSubject()), 'Q')];
+            $headers['Subject'] = [
+                mb_encode_mimeheader(
+                    $mail->getSubject(),
+                    mb_detect_encoding($mail->getSubject()),
+                    'Q'
+                )
+            ];
         }
 
         // Addresses
-        {
-            if (!in_array('from', $exclude)) {
-                $contents[] = sprintf('%s: %s', 'From', (string)$mail->getFrom());
-            }
-
-            if (!in_array('to', $exclude)) {
-                if (count($mail->getTo()) > 0) {
-                    $contents[] = sprintf('%s: %s', 'To', implode(', ', $mail->getTo()));
-                } else {
-                    $contents[] = 'To: undisclosed-recipients:;';
-                }
-            }
-
-            if (!in_array('cc', $exclude) && count($mail->getCc()) > 0) {
-                $contents[] = sprintf('%s: %s', 'Cc', implode(', ', $mail->getCc()));
-            }
-
-            if (!in_array('bcc', $exclude) && count($mail->getBcc()) > 0) {
-                $contents[] = sprintf('%s: %s', 'Bcc', implode(', ', $mail->getBcc()));
+        if (!in_array('from', $exclude)) {
+            $contents[] = sprintf('%s: %s', 'From', (string)$mail->getFrom());
+        }
+        if (!in_array('to', $exclude)) {
+            if (count($mail->getTo()) > 0) {
+                $contents[] = sprintf('%s: %s', 'To', implode(', ', $mail->getTo()));
+            } else {
+                $contents[] = 'To: undisclosed-recipients:;';
             }
         }
+        if (!in_array('cc', $exclude) && count($mail->getCc()) > 0) {
+            $contents[] = sprintf('%s: %s', 'Cc', implode(', ', $mail->getCc()));
+        }
+        if (!in_array('bcc', $exclude) && count($mail->getBcc()) > 0) {
+            $contents[] = sprintf('%s: %s', 'Bcc', implode(', ', $mail->getBcc()));
+        }
 
+        // Complete with headers
         foreach ($headers as $name => $values) {
             if (!in_array(mb_strtolower($name), $exclude)) {
                 foreach ((array)$values as $value) {
@@ -121,7 +130,7 @@ abstract class AbstractTransport implements TransportInterface
      *
      * @return string[]
      */
-    protected function getContents(\Berlioz\Mailer\Mail $mail): array
+    protected function getContents(Mail $mail): array
     {
         $contents = [];
 
@@ -145,100 +154,105 @@ abstract class AbstractTransport implements TransportInterface
             );
 
         // Contents
-        {
-            // If has $attachments
-            if (count($attachments) > 0) {
-                $contents[] = sprintf('Content-Type: multipart/mixed; boundary="%s"', $this->getBoundary('mixed'));
-                $contents[] = '';
-                $contents[] = 'This is a multi-part message in MIME format.';
-                $contents[] = '';
-                $contents[] = sprintf('--%s', $this->getBoundary('mixed'));
-            }
-            // If has text and html
-            if ($mail->hasText() && $mail->hasHtml()) {
-                $contents[] = sprintf('Content-Type: multipart/alternative; boundary="%s"', $this->getBoundary('alternative'));
-                $contents[] = '';
-                $contents[] = 'This is a multi-part message in MIME format.';
+        // If has $attachments
+        if (count($attachments) > 0) {
+            $contents[] = sprintf('Content-Type: multipart/mixed; boundary="%s"', $this->getBoundary('mixed'));
+            $contents[] = '';
+            $contents[] = 'This is a multi-part message in MIME format.';
+            $contents[] = '';
+            $contents[] = sprintf('--%s', $this->getBoundary('mixed'));
+        }
+        // If has text and html
+        if ($mail->hasText() && $mail->hasHtml()) {
+            $contents[] = sprintf(
+                'Content-Type: multipart/alternative; boundary="%s"',
+                $this->getBoundary('alternative')
+            );
+            $contents[] = '';
+            $contents[] = 'This is a multi-part message in MIME format.';
+            $contents[] = '';
+            $contents[] = sprintf('--%s', $this->getBoundary('alternative'));
+        }
+
+        // Text
+        if ($mail->hasText()) {
+            $contents[] = sprintf(
+                'Content-Type: text/plain; charset="%s"; format=flowed; delsp=yes',
+                mb_detect_encoding($mail->getText())
+            );
+            $contents[] = 'Content-Transfer-Encoding: base64';
+            $contents[] = '';
+            $contents = array_merge($contents, str_split(base64_encode($mail->getText()), 76));
+            $contents[] = '';
+        }
+
+        // Html
+        if ($mail->hasHtml()) {
+            if ($mail->hasText()) {
                 $contents[] = '';
                 $contents[] = sprintf('--%s', $this->getBoundary('alternative'));
             }
 
-            // Text
-            if ($mail->hasText()) {
+            if (count($htmlAttachments) > 0) {
                 $contents[] = sprintf(
-                    'Content-Type: text/plain; charset="%s"; format=flowed; delsp=yes',
-                    mb_detect_encoding($mail->getText())
+                    'Content-Type: multipart/related; boundary="%s"',
+                    $this->getBoundary('related')
                 );
-                $contents[] = 'Content-Transfer-Encoding: base64';
                 $contents[] = '';
-                $contents = array_merge($contents, str_split(base64_encode($mail->getText()), 76));
+                $contents[] = 'This is a multi-part message in MIME format.';
                 $contents[] = '';
+                $contents[] = sprintf('--%s', $this->getBoundary('related'));
             }
 
-            // Html
-            if ($mail->hasHtml()) {
-                if ($mail->hasText()) {
-                    $contents[] = '';
-                    $contents[] = sprintf('--%s', $this->getBoundary('alternative'));
-                }
+            $contents[] = sprintf(
+                'Content-Type: text/html; charset="%s"; format=flowed; delsp=yes',
+                mb_detect_encoding($mail->getHtml())
+            );
+            $contents[] = 'Content-Transfer-Encoding: quoted-printable';
+            $contents[] = '';
+            $contents = array_merge($contents, explode("\r\n", quoted_printable_encode($mail->getHtml(true))));
+            $contents[] = '';
 
-                if (count($htmlAttachments) > 0) {
-                    $contents[] = sprintf('Content-Type: multipart/related; boundary="%s"', $this->getBoundary('related'));
-                    $contents[] = '';
-                    $contents[] = 'This is a multi-part message in MIME format.';
-                    $contents[] = '';
-                    $contents[] = sprintf('--%s', $this->getBoundary('related'));
-                }
-
-                $contents[] = sprintf(
-                    'Content-Type: text/html; charset="%s"; format=flowed; delsp=yes',
-                    mb_detect_encoding($mail->getHtml())
-                );
-                $contents[] = 'Content-Transfer-Encoding: quoted-printable';
-                $contents[] = '';
-                $contents = array_merge($contents, explode("\r\n", quoted_printable_encode($mail->getHtml(true))));
-                $contents[] = '';
-
-                if (count($htmlAttachments) > 0) {
-                    /** @var \Berlioz\Mailer\Attachment $attachment */
-                    foreach ($htmlAttachments as $attachment) {
-                        $contents[] = sprintf('--%s', $this->getBoundary('related'));
-                        $contents[] = sprintf(
-                            'Content-Type: %s; name="%s"',
-                            $attachment->getType(),
-                            $attachment->getName()
-                        );
-                        $contents[] = 'Content-Transfer-Encoding: base64';
-                        $contents[] = 'Content-Disposition: inline';
-                        $contents[] = sprintf('Content-ID: <%s>', $attachment->getId());
-                        $contents[] = '';
-                        $contents = array_merge($contents, str_split(base64_encode($attachment->getContents()), 76));
-                        $contents[] = '';
-                    }
-                    $contents[] = sprintf('--%s--', $this->getBoundary('related'));
-                }
-            }
-
-            // Attachments
-            if (count($attachments) > 0) {
+            if (count($htmlAttachments) > 0) {
                 /** @var \Berlioz\Mailer\Attachment $attachment */
-                foreach ($attachments as $attachment) {
-                    $contents[] = sprintf('--%s', $this->getBoundary('mixed'));
+                foreach ($htmlAttachments as $attachment) {
+                    $contents[] = sprintf('--%s', $this->getBoundary('related'));
                     $contents[] = sprintf(
                         'Content-Type: %s; name="%s"',
                         $attachment->getType(),
                         $attachment->getName()
                     );
                     $contents[] = 'Content-Transfer-Encoding: base64';
-                    $contents[] = 'Content-Disposition: attachment;';
-                    $contents[] = sprintf('    filename="%s"', $attachment->getName());
+                    $contents[] = 'Content-Disposition: inline';
+                    $contents[] = sprintf('Content-ID: <%s>', $attachment->getId());
                     $contents[] = '';
                     $contents = array_merge($contents, str_split(base64_encode($attachment->getContents()), 76));
                     $contents[] = '';
                 }
-                $contents[] = sprintf('--%s--', $this->getBoundary('mixed'));
+                $contents[] = sprintf('--%s--', $this->getBoundary('related'));
             }
         }
+
+        // Attachments
+        if (count($attachments) > 0) {
+            /** @var \Berlioz\Mailer\Attachment $attachment */
+            foreach ($attachments as $attachment) {
+                $contents[] = sprintf('--%s', $this->getBoundary('mixed'));
+                $contents[] = sprintf(
+                    'Content-Type: %s; name="%s"',
+                    $attachment->getType(),
+                    $attachment->getName()
+                );
+                $contents[] = 'Content-Transfer-Encoding: base64';
+                $contents[] = 'Content-Disposition: attachment;';
+                $contents[] = sprintf('    filename="%s"', $attachment->getName());
+                $contents[] = '';
+                $contents = array_merge($contents, str_split(base64_encode($attachment->getContents()), 76));
+                $contents[] = '';
+            }
+            $contents[] = sprintf('--%s--', $this->getBoundary('mixed'));
+        }
+
 
         return $contents;
     }
@@ -254,19 +268,21 @@ abstract class AbstractTransport implements TransportInterface
      */
     private function getBoundary(string $type, string $prefix = null, int $length = 12): string
     {
-        if (empty($this->boundaries[$type])) {
-            $source = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-            $length = abs(intval($length));
-            $n = strlen($source);
-            $this->boundaries[$type] = '--' . ($prefix ? $prefix . '-' : '');
-
-            for ($i = 0; $i < ($length - 2); $i++) {
-                $this->boundaries[$type] .= $source[mt_rand(1, $n) - 1];
-            }
-
-            $this->boundaries[$type] = substr($this->boundaries[$type], 0, $length);
+        if (!empty($this->boundaries[$type])) {
+            return $this->boundaries[$type];
         }
+
+        $source = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        $length = abs(intval($length));
+        $n = strlen($source);
+        $this->boundaries[$type] = '--' . ($prefix ? $prefix . '-' : '');
+
+        for ($i = 0; $i < ($length - 2); $i++) {
+            $this->boundaries[$type] .= $source[mt_rand(1, $n) - 1];
+        }
+
+        $this->boundaries[$type] = substr($this->boundaries[$type], 0, $length);
 
         return $this->boundaries[$type];
     }

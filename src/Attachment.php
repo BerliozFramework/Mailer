@@ -14,6 +14,11 @@ declare(strict_types=1);
 
 namespace Berlioz\Mailer;
 
+/**
+ * Class Attachment.
+ *
+ * @package Berlioz\Mailer
+ */
 class Attachment
 {
     /** @var string Id */
@@ -54,26 +59,27 @@ class Attachment
      */
     public function getId($domainName = null): string
     {
-        if (is_null($this->id)) {
-            $source = "0123456789";
-            $n = strlen($source);
-
-            // Construct content id
-            $id = "part1.";
-            for ($i = 0; $i < 8; $i++) {
-                $id .= $source[mt_rand(1, $n) - 1];
-            }
-
-            $id .= ".";
-            for ($i = 0; $i < 8; $i++) {
-                $id .= $source[mt_rand(1, $n) - 1];
-            }
-
-            $id .= "@" . (is_null($domainName) ? "berlioz" : $domainName);
-
-            // Set content id
-            $this->id = $id;
+        if (null !== $this->id) {
+            return $this->id;
         }
+
+        $source = "0123456789";
+        $n = strlen($source);
+
+        // Construct content id
+        $id = "part1.";
+        for ($i = 0; $i < 8; $i++) {
+            $id .= $source[mt_rand(1, $n) - 1];
+        }
+
+        $id .= ".";
+        for ($i = 0; $i < 8; $i++) {
+            $id .= $source[mt_rand(1, $n) - 1];
+        }
+
+        $id .= "@" . (null === $domainName ? "berlioz" : $domainName);
+
+        $this->id = $id;
 
         return $this->id;
     }
@@ -85,7 +91,7 @@ class Attachment
      */
     public function hasId(): bool
     {
-        return !is_null($this->id);
+        return null !== $this->id;
     }
 
     /**
@@ -95,14 +101,16 @@ class Attachment
      */
     public function getType(): string
     {
-        if (is_null($this->type)) {
-            $finfo = finfo_open(FILEINFO_MIME);
-            $mime = finfo_file($finfo, $this->fileName);
-
-            $mime = explode(";", $mime);
-            $mime = trim($mime[0]);
-            $this->type = $mime;
+        if (null !== $this->type) {
+            return $this->type;
         }
+
+        $finfo = finfo_open(FILEINFO_MIME);
+        $mime = finfo_file($finfo, $this->fileName);
+
+        $mime = explode(";", $mime);
+        $mime = trim($mime[0]);
+        $this->type = $mime;
 
         return $this->type;
     }

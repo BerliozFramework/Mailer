@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Berlioz\Mailer\Exception;
 
-class MailerException extends \Exception
+use Exception;
+
+class MailerException extends Exception
 {
 }
