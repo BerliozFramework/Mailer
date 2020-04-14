@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning] (http://semver.org/).
 For change log format, use [Keep a Changelog] (http://keepachangelog.com/).
 
+## [1.2] - 2020-04-14
+### Changed
+- Exceptions more verbose from SMTP transport
+- PSR-12 refactoring
+- Change `\Berlioz\Mailer\Mail` class as deprecated, replaced by `\Berlioz\Mailer\PhpMail`
+
 ## [1.1.2] - 2020-02-10
 ### Added
 - Add coverage options in phpunit.xml.dist
