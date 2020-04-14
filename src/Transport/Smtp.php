@@ -138,7 +138,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
             // Log
             $this->log(LogLevel::ERROR, sprintf('Connection error: %s', $response));
 
-            throw new TransportException('Connection refused');
+            throw new TransportException(sprintf('Connection refused: %s', $response));
         }
 
         // Log
@@ -150,7 +150,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
             // Log
             $this->log(LogLevel::ERROR, sprintf('HELO command error: %s', $response));
 
-            throw new TransportException('"HELO" command failed');
+            throw new TransportException(sprintf('"HELO" command failed: %s', $response));
         }
 
         // Log
@@ -163,7 +163,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
                 // Log
                 $this->log(LogLevel::ERROR, sprintf('Login failed: %s', $response));
 
-                throw new TransportException('Login failed');
+                throw new TransportException(sprintf('Login failed: %s', $response));
             }
 
             // Log
@@ -192,14 +192,14 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
             // Log
             $this->log(LogLevel::ERROR, sprintf('QUIT command error: %s', $response));
 
-            throw new TransportException('Disconnection failed');
+            throw new TransportException(sprintf('Disconnection failed: %s', $response));
         }
 
         // Log
         $this->log(LogLevel::DEBUG, sprintf('QUIT command response: %s', $response));
 
         if (is_resource($this->resource) && @fclose($this->resource) === false) {
-            throw new TransportException(sprintf('Unable to close resource %s:%s', $this->host, $this->port));
+            throw new TransportException(sprintf('Unable to close resource "%s:%s"', $this->host, $this->port));
         }
 
         $this->resource = false;
@@ -284,7 +284,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
             // Log
             $this->log(LogLevel::ERROR, sprintf('MAIL FROM command error: %s', $response));
 
-            throw new TransportException('"MAIL FROM" command failed');
+            throw new TransportException(sprintf('"MAIL FROM" command failed: %s', $response));
         }
 
         // Log
@@ -307,7 +307,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
                     $this->log(LogLevel::ERROR, sprintf('RCPT TO command error: %s', $response));
 
                     throw new TransportException(
-                        sprintf('"RCPT TO" command failed for "%s" email address', $address->getMail())
+                        sprintf('"RCPT TO" command failed for "%s" email address: %s', $address->getMail(), $response)
                     );
                 }
 
@@ -323,7 +323,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
             // Log
             $this->log(LogLevel::ERROR, sprintf('DATA command error: %s', $response));
 
-            throw new TransportException('DATA command failed');
+            throw new TransportException(sprintf('DATA command failed: %s', $response));
         }
 
         // Log
@@ -342,7 +342,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
             // Log
             $this->log(LogLevel::ERROR, sprintf('End of data command error: %s', $response));
 
-            throw new TransportException('Write of data failed');
+            throw new TransportException(sprintf('Write of data failed: %s', $response));
         }
 
         // Log
