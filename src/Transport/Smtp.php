@@ -78,24 +78,6 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
     }
 
     /**
-     * __set_state() magic method.
-     *
-     * @param array $an_array Properties array.
-     *
-     * @return array
-     */
-    public static function __set_state($an_array): array
-    {
-        return [
-            'host' => $an_array['host'],
-            'port' => $an_array['port'],
-            'timeout' => $an_array['timeout'],
-            'username' => $an_array['username'],
-            'password' => '*** HIDDEN ***'
-        ];
-    }
-
-    /**
      * __debugInfo() magic method.
      *
      * @return array
