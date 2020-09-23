@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning] (http://semver.org/).
 For change log format, use [Keep a Changelog] (http://keepachangelog.com/).
 
-## [1.2.1] - 2020-08-17
+## [1.2.1] - 2020-09-23
 ### Removed
 - Remove Smtp::__set_state() method ; incompatible signature with PHP 8
 
