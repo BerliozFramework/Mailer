@@ -20,7 +20,7 @@ $ composer require berlioz/mailer
 
 ### Dependencies
 
-* **PHP** >= 7.1
+* **PHP** ^7.1 || ^8.0
 * PHP extensions:
   * **FileInfo**
 * Packages:
@@ -34,14 +34,18 @@ $ composer require berlioz/mailer
 You can send simply the like this:
 
 ```php
-$mail = (new \Berlioz\Mailer\Mail())
+use Berlioz\Mailer\Address;
+use Berlioz\Mailer\Mail;
+use Berlioz\Mailer\Mailer;
+
+$mail = (new Mail())
             ->setSubject('Test of Berlioz/Mailer')
             ->setText('Text plain of my mail')
             ->setHtml('<p>Html text of my mail</p>')
             ->setFrom(new Address('sender@test.com', 'Me the sender'))
             ->setTo([new Address('recipient@test.com', 'The recipient')]); 
 
-$mailer = new \Berlioz\Mailer\Mailer;
+$mailer = new Mailer();
 $mailer->send($mail);
 ```
 
@@ -52,7 +56,10 @@ $mailer->send($mail);
 #### Basic
 
 ```php
-$mail = new \Berlioz\Mailer\Mail;
+use Berlioz\Mailer\Address;
+use Berlioz\Mailer\Mail;
+
+$mail = new Mail();
 $mail->setSubject('Subject of my mail')
      ->setText('Text plain of my mail')
      ->setHtml('<p>Html text of my mail</p>')
@@ -65,15 +72,15 @@ $mail->setSubject('Subject of my mail')
 To add downloadable attachment:
 
 ```php
-$attachment = new \Berlioz\Mailer\Attachment('/path/of/my/file.pdf');
-$mail = new \Berlioz\Mailer\Mail;
+use Berlioz\Mailer\Attachment;use Berlioz\Mailer\Mail;$attachment = new Attachment('/path/of/my/file.pdf');
+$mail = new Mail();
 $mail->addAttachment($attachment);
 ```
 
 To attach an attachment to HTML content:
 ```php
-$attachment = new \Berlioz\Mailer\Attachment('/path/of/my/img.jpg');
-$mail = new \Berlioz\Mailer\Mail;
+use Berlioz\Mailer\Attachment;use Berlioz\Mailer\Mail;$attachment = new Attachment('/path/of/my/img.jpg');
+$mail = new Mail();
 $mail->addAttachment($attachment);
 
 $html = '<p>Html content 1</p>';
@@ -89,27 +96,39 @@ $mail->setHtml($html);
 
 #### Defaults transports
 
-Default transport is **\Berlioz\Mailer\Transport\Mail** uses internal **mail()** of PHP.
+Default transport is **\Berlioz\Mailer\Transport\PhpMail** uses internal **mail()** of PHP.
 
 You can uses another available transport for direct communication with SMTP server: **\Berlioz\Mailer\Transport\Smtp**.
 
 ```php
-$smtp = new \Berlioz\Mailer\Transport\Smtp('smpt.test.com',
-                                           'user@test.com',
-                                           'password',
-                                           25,
-                                           ['timeout' => 5]);
-$mailer = new \Berlioz\Mailer\Mailer;
+use Berlioz\Mailer\Mailer;
+use Berlioz\Mailer\Transport\Smtp;
+
+$smtp = new Smtp(
+    'smpt.test.com',
+    'user@test.com',
+    'password',
+    25,
+    ['timeout' => 5]
+);
+$mailer = new Mailer();
 $mailer->setTransport($smtp);
 ```
 
 ```php
-$mailer = new \Berlioz\Mailer\Mailer(['transport' => ['name'      => 'smtp',
-                                                      'arguments' => ['host'     => 'smpt.test.com',
-                                                                      'username' => 'user@test.com',
-                                                                      'password' => 'password',
-                                                                      'port'     => 25,
-                                                                      'options'  => ['timeout' => 5]]]]);
+use Berlioz\Mailer\Mailer;
+$mailer = new Mailer([
+    'transport' => [
+        'name' => 'smtp',
+        'arguments' => [
+            'host' => 'smpt.test.com',
+            'username' => 'user@test.com',
+            'password' => 'password',
+            'port' => 25,
+            'options' => ['timeout' => 5]
+        ]
+    ]
+]);
 ```
 
 #### Create a new transport
