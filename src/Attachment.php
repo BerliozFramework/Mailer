@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Berlioz\Mailer;
 
+use Berlioz\Mailer\Exception\MailerException;
+
 /**
  * Class Attachment.
  *
@@ -98,11 +100,16 @@ class Attachment
      * Get type.
      *
      * @return string
+     * @throws MailerException
      */
     public function getType(): string
     {
         if (null !== $this->type) {
             return $this->type;
+        }
+
+        if (!file_exists($this->fileName)) {
+            throw new MailerException(sprintf('Attachment file "%s" does not exists', $this->fileName));
         }
 
         $finfo = finfo_open(FILEINFO_MIME);
