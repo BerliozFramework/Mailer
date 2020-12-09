@@ -28,6 +28,7 @@ use Psr\Log\LogLevel;
 class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
+
     /** @var string Host */
     private $host;
     /** @var int Port */
@@ -236,11 +237,6 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
 
         if (is_array($data)) {
             $data = implode($this->getLineFeed(), $data);
-        }
-
-        // Windows
-        if (stristr(PHP_OS, 'WIN')) {
-            $data = str_replace("\n.", "\n..", $data);
         }
 
         if (!fwrite($this->resource, $data . $this->getLineFeed())) {

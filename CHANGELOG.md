@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning] (http://semver.org/).
 For change log format, use [Keep a Changelog] (http://keepachangelog.com/).
 
+## [1.3.1] - 2020-12-09
+### Changed
+- Escape dot at first character line, on SMTP dialog with quoted_printable_encode()
+
 ## [1.3] - 2020-11-05
 ### Added
 - PHP 8 compatibility

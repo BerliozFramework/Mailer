@@ -210,7 +210,7 @@ abstract class AbstractTransport implements TransportInterface
             );
             $contents[] = 'Content-Transfer-Encoding: quoted-printable';
             $contents[] = '';
-            $contents = array_merge($contents, explode("\r\n", quoted_printable_encode($mail->getHtml(true))));
+            $contents = array_merge($contents, explode("\r\n", $this->quotedPrintableEncode($mail->getHtml(true))));
             $contents[] = '';
 
             if (count($htmlAttachments) > 0) {
@@ -285,5 +285,69 @@ abstract class AbstractTransport implements TransportInterface
         $this->boundaries[$type] = substr($this->boundaries[$type], 0, $length);
 
         return $this->boundaries[$type];
+    }
+
+    /**
+     * Quoted printable encode.
+     *
+     * Same as quoted_printable_encode() function, but dot at line first character.
+     *
+     * @param string $str
+     *
+     * @return string
+     * @see https://www.php.net/manual/fr/function.quoted-printable-encode.php#115840
+     */
+    public function quotedPrintableEncode(string $str): string
+    {
+        $lp = 0;
+        $ret = '';
+        $hex = "0123456789ABCDEF";
+        $length = strlen($str);
+        $str_index = 0;
+
+        while ($length--) {
+            if ((($c = $str[$str_index++]) == "\015") && ($str[$str_index] == "\012") && $length > 0) {
+                $ret .= "\015";
+                $ret .= $str[$str_index++];
+                $length--;
+                $lp = 0;
+
+                continue;
+            }
+
+            if (ctype_cntrl($c)
+                || (ord($c) == 0x7f)
+                || (ord($c) & 0x80)
+                || ($c == '=')
+                || (($c == ' ') && ($str[$str_index] == "\015"))) {
+                if (($lp += 3) > 75) {
+                    $ret .= '=';
+                    $ret .= "\015";
+                    $ret .= "\012";
+                    $lp = 3;
+                }
+                $ret .= '=';
+                $ret .= $hex[ord($c) >> 4];
+                $ret .= $hex[ord($c) & 0xf];
+
+                continue;
+            }
+
+            if ((++$lp) > 75) {
+                $ret .= '=';
+                $ret .= "\015";
+                $ret .= "\012";
+                $lp = 1;
+            }
+
+            $ret .= $c;
+
+            if ($lp == 1 && $c == '.') {
+                $ret .= '.';
+                $lp++;
+            }
+        }
+
+        return $ret;
     }
 }
