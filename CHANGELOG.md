@@ -12,6 +12,7 @@ use [Keep a Changelog] (http://keepachangelog.com/).
 
 ### Fixed
 
+- Last alternative boundary not declared
 - Fix PhpDoc and imports
 
 ## [1.3.1] - 2020-12-09

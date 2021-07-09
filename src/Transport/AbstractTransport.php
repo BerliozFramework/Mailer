@@ -231,6 +231,10 @@ abstract class AbstractTransport implements TransportInterface
                 }
                 $contents[] = sprintf('--%s--', $this->getBoundary('related'));
             }
+
+            if ($mail->hasText()) {
+                $contents[] = sprintf('--%s--', $this->getBoundary('alternative'));
+            }
         }
 
         // Attachments
@@ -266,7 +270,7 @@ abstract class AbstractTransport implements TransportInterface
      *
      * @return string
      */
-    private function getBoundary(string $type, string $prefix = null, int $length = 12): string
+    protected function getBoundary(string $type, string $prefix = null, int $length = 12): string
     {
         if (!empty($this->boundaries[$type])) {
             return $this->boundaries[$type];
