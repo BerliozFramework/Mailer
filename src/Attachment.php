@@ -39,7 +39,7 @@ class Attachment
      *
      * @param string $fileName
      */
-    public function __construct($fileName)
+    public function __construct(string $fileName)
     {
         if (is_file($fileName)) {
             $this->fileName = $fileName;
@@ -55,11 +55,11 @@ class Attachment
      * If you call this method, it's only for get id for HTML insertion of attachments.
      * Else, this attachment will do not appear in downloadable attachments of mail.
      *
-     * @param string $domainName
+     * @param string|null $domainName
      *
      * @return string
      */
-    public function getId($domainName = null): string
+    public function getId(string $domainName = null): string
     {
         if (null !== $this->id) {
             return $this->id;
@@ -173,7 +173,7 @@ class Attachment
     /**
      * Get contents.
      *
-     * @return mixed
+     * @return false|string
      */
     public function getContents()
     {

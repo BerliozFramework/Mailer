@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Berlioz\Mailer\Transport;
 
 use Berlioz\Mailer\Address;
+use Berlioz\Mailer\Exception\MailerException;
 use Berlioz\Mailer\Exception\TransportException;
 use Berlioz\Mailer\Mail;
 use Psr\Log\LoggerAwareInterface;
@@ -246,8 +247,9 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      * @return void
+     * @throws MailerException
      */
     public function send(Mail $mail)
     {
@@ -329,16 +331,16 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      * @return void
      */
-    public function massSend(Mail $mail, array $addresses, callable $callback = null)
+    public function massSend(Mail $mail, array $addresses, callable $callback = null): array
     {
         if (!$this->isConnected()) {
             $this->connect();
         }
 
-        parent::massSend($mail, $addresses, $callback);
+        return parent::massSend($mail, $addresses, $callback);
     }
 
     /**
@@ -350,7 +352,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
      *
      * @return void
      */
-    private function log($level, $message, array $context = []): void
+    private function log($level, string $message, array $context = []): void
     {
         if (null === $this->logger) {
             return;

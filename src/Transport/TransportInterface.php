@@ -49,7 +49,7 @@ interface TransportInterface
      *
      * @param Mail $mail Mail
      * @param Address[] $addresses Address list
-     * @param callable $callback Callback called after each email sent
+     * @param callable|null $callback Callback called after each email sent
      *
      * @return mixed Depends of transport
      * @throws TransportException if an error occurred during sending of mail.

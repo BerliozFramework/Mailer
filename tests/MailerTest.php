@@ -56,7 +56,7 @@ class MailerTest extends TestCase
     public function testConstructorExceptionInvalidClass()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Transport class must be an instance of \Berlioz\Mailer\Transport\TransportInterface interface');
+        $this->expectExceptionMessage('Transport class must be an instance of Berlioz\Mailer\Transport\TransportInterface interface');
 
         new Mailer(['transport' => ['class' => '\Berlioz\Mailer\Tests\MailerTest']]);
     }

@@ -10,6 +10,10 @@ use [Keep a Changelog] (http://keepachangelog.com/).
 
 - Optimize imports
 
+### Fixed
+
+- Fix PhpDoc and imports
+
 ## [1.3.1] - 2020-12-09
 
 ### Changed

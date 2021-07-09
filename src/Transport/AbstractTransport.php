@@ -16,6 +16,7 @@ namespace Berlioz\Mailer\Transport;
 
 use Berlioz\Mailer\Address;
 use Berlioz\Mailer\Attachment;
+use Berlioz\Mailer\Exception\MailerException;
 use Berlioz\Mailer\Mail;
 
 /**
@@ -29,10 +30,10 @@ abstract class AbstractTransport implements TransportInterface
     private $boundaries = [];
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      * @return array
      */
-    public function massSend(Mail $mail, array $addresses, callable $callback = null)
+    public function massSend(Mail $mail, array $addresses, callable $callback = null): array
     {
         $result = [];
 
@@ -60,7 +61,7 @@ abstract class AbstractTransport implements TransportInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function getLineFeed(): string
     {
@@ -131,6 +132,7 @@ abstract class AbstractTransport implements TransportInterface
      * @param Mail $mail Mail
      *
      * @return string[]
+     * @throws MailerException
      */
     protected function getContents(Mail $mail): array
     {
@@ -142,7 +144,6 @@ abstract class AbstractTransport implements TransportInterface
             array_filter(
                 $attachments,
                 function ($attachment) {
-                    /** @var Attachment $attachment */
                     return $attachment->hasId();
                 }
             );
@@ -150,7 +151,6 @@ abstract class AbstractTransport implements TransportInterface
             array_filter(
                 $attachments,
                 function ($attachment) {
-                    /** @var Attachment $attachment */
                     return !$attachment->hasId();
                 }
             );
@@ -276,7 +276,7 @@ abstract class AbstractTransport implements TransportInterface
 
         $source = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-        $length = abs(intval($length));
+        $length = abs($length);
         $n = strlen($source);
         $this->boundaries[$type] = '--' . ($prefix ? $prefix . '-' : '');
 

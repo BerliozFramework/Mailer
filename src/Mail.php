@@ -99,7 +99,7 @@ class Mail
      * @return static
      * @throws InvalidArgumentException if reserved header is used.
      */
-    public function addHeader(string $name, $value, bool $replace = false): Mail
+    public function addHeader(string $name, string $value, bool $replace = false): Mail
     {
         // Check reserved headers
         if (in_array($name, self::RESERVED_HEADERS)) {

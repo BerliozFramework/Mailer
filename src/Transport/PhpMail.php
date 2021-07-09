@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Berlioz\Mailer\Transport;
 
+use Berlioz\Mailer\Exception\MailerException;
 use Berlioz\Mailer\Exception\TransportException;
 use Berlioz\Mailer\Mail;
 
@@ -25,11 +26,11 @@ use Berlioz\Mailer\Mail;
 class PhpMail extends AbstractTransport implements TransportInterface
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      * @return bool
-     * @throws TransportException
+     * @throws MailerException
      */
-    public function send(Mail $mail)
+    public function send(Mail $mail): bool
     {
         // To
         $toAddresses = $mail->getTo();
