@@ -15,20 +15,22 @@ declare(strict_types=1);
 namespace Berlioz\Mailer;
 
 use Berlioz\Mailer\Exception\InvalidArgumentException;
+use Berlioz\Mailer\Exception\TransportException;
 use Berlioz\Mailer\Transport\PhpMail as MailTransport;
 use Berlioz\Mailer\Transport\TransportInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
+use ReflectionException;
 
 class Mailer implements LoggerAwareInterface
 {
     /** Default transports into the package. */
-    const DEFAULT_TRANSPORTS = [
+    public const DEFAULT_TRANSPORTS = [
         'smtp' => '\Berlioz\Mailer\Transport\Smtp',
         'mail' => '\Berlioz\Mailer\Transport\PhpMail'
     ];
-    /** @var \Berlioz\Mailer\Transport\TransportInterface Transport */
+    /** @var TransportInterface Transport */
     private $transport;
     /** @var LoggerInterface The logger instance. */
     private $logger;
@@ -38,8 +40,8 @@ class Mailer implements LoggerAwareInterface
      *
      * @param array $options
      *
-     * @throws \Berlioz\Mailer\Exception\InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function __construct(array $options = [])
     {
@@ -115,7 +117,7 @@ class Mailer implements LoggerAwareInterface
     /**
      * Get transport.
      *
-     * @return \Berlioz\Mailer\Transport\TransportInterface
+     * @return TransportInterface
      */
     public function getTransport(): TransportInterface
     {
@@ -129,7 +131,7 @@ class Mailer implements LoggerAwareInterface
     /**
      * Set transport.
      *
-     * @param \Berlioz\Mailer\Transport\TransportInterface $transport
+     * @param TransportInterface $transport
      *
      * @return static
      */
@@ -148,10 +150,10 @@ class Mailer implements LoggerAwareInterface
     /**
      * Sending of email.
      *
-     * @param \Berlioz\Mailer\Mail $mail Mail
+     * @param Mail $mail Mail
      *
      * @return mixed Depends of transport
-     * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
+     * @throws TransportException if an error occurred during sending of mail.
      */
     public function send(Mail $mail)
     {
@@ -161,12 +163,12 @@ class Mailer implements LoggerAwareInterface
     /**
      * Mass sending of email.
      *
-     * @param \Berlioz\Mailer\Mail $mail Mail
-     * @param \Berlioz\Mailer\Address[] $addresses Address list
+     * @param Mail $mail Mail
+     * @param Address[] $addresses Address list
      * @param callable $callback Callback called after each email sent
      *
      * @return mixed Depends of transport
-     * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
+     * @throws TransportException if an error occurred during sending of mail.
      */
     public function massSend(Mail $mail, array $addresses, callable $callback = null)
     {

@@ -27,7 +27,7 @@ class PhpMail extends AbstractTransport implements TransportInterface
     /**
      * @inheritdoc
      * @return bool
-     * @throws \Berlioz\Mailer\Exception\TransportException
+     * @throws TransportException
      */
     public function send(Mail $mail)
     {

@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Berlioz\Mailer\Transport;
 
+use Berlioz\Mailer\Address;
+use Berlioz\Mailer\Exception\TransportException;
 use Berlioz\Mailer\Mail;
 
 /**
@@ -35,22 +37,22 @@ interface TransportInterface
     /**
      * Sending of email.
      *
-     * @param \Berlioz\Mailer\Mail $mail Mail
+     * @param Mail $mail Mail
      *
      * @return mixed Depends of transport
-     * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
+     * @throws TransportException if an error occurred during sending of mail.
      */
     public function send(Mail $mail);
 
     /**
      * Mass sending of email.
      *
-     * @param \Berlioz\Mailer\Mail $mail Mail
-     * @param \Berlioz\Mailer\Address[] $addresses Address list
+     * @param Mail $mail Mail
+     * @param Address[] $addresses Address list
      * @param callable $callback Callback called after each email sent
      *
      * @return mixed Depends of transport
-     * @throws \Berlioz\Mailer\Exception\TransportException if an error occurred during sending of mail.
+     * @throws TransportException if an error occurred during sending of mail.
      */
     public function massSend(Mail $mail, array $addresses, callable $callback = null);
 }

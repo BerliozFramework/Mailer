@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Berlioz\Mailer\Transport;
 
+use Berlioz\Mailer\Address;
+use Berlioz\Mailer\Attachment;
 use Berlioz\Mailer\Mail;
 
 /**
@@ -35,7 +37,7 @@ abstract class AbstractTransport implements TransportInterface
         $result = [];
 
         $i = 0;
-        /** @var \Berlioz\Mailer\Address $address */
+        /** @var Address $address */
         foreach ($addresses as $address) {
             // Reset and set new address
             $mail->resetRecipients();
@@ -70,7 +72,7 @@ abstract class AbstractTransport implements TransportInterface
      *
      * Note: This method is used by transport, users use getHeaders().
      *
-     * @param \Berlioz\Mailer\Mail $mail Mail
+     * @param Mail $mail Mail
      * @param array $exclude Headers to exclude
      *
      * @return string[]
@@ -126,7 +128,7 @@ abstract class AbstractTransport implements TransportInterface
     /**
      * Get contents.
      *
-     * @param \Berlioz\Mailer\Mail $mail Mail
+     * @param Mail $mail Mail
      *
      * @return string[]
      */
@@ -140,7 +142,7 @@ abstract class AbstractTransport implements TransportInterface
             array_filter(
                 $attachments,
                 function ($attachment) {
-                    /** @var \Berlioz\Mailer\Attachment $attachment */
+                    /** @var Attachment $attachment */
                     return $attachment->hasId();
                 }
             );
@@ -148,7 +150,7 @@ abstract class AbstractTransport implements TransportInterface
             array_filter(
                 $attachments,
                 function ($attachment) {
-                    /** @var \Berlioz\Mailer\Attachment $attachment */
+                    /** @var Attachment $attachment */
                     return !$attachment->hasId();
                 }
             );
@@ -214,7 +216,7 @@ abstract class AbstractTransport implements TransportInterface
             $contents[] = '';
 
             if (count($htmlAttachments) > 0) {
-                /** @var \Berlioz\Mailer\Attachment $attachment */
+                /** @var Attachment $attachment */
                 foreach ($htmlAttachments as $attachment) {
                     $contents[] = sprintf('--%s', $this->getBoundary('related'));
                     $contents[] = sprintf(
@@ -235,7 +237,7 @@ abstract class AbstractTransport implements TransportInterface
 
         // Attachments
         if (count($attachments) > 0) {
-            /** @var \Berlioz\Mailer\Attachment $attachment */
+            /** @var Attachment $attachment */
             foreach ($attachments as $attachment) {
                 $contents[] = sprintf('--%s', $this->getBoundary('mixed'));
                 $contents[] = sprintf(

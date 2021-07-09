@@ -26,13 +26,13 @@ class Mail
     protected const RESERVED_HEADERS = ['Subject', 'From', 'To', 'Cc', 'Bcc'];
     /** @var array Headers */
     private $headers;
-    /** @var \Berlioz\Mailer\Address From */
+    /** @var Address From */
     private $from;
-    /** @var \Berlioz\Mailer\Address[] To */
+    /** @var Address[] To */
     private $to;
-    /** @var \Berlioz\Mailer\Address[] Cc */
+    /** @var Address[] Cc */
     private $cc;
-    /** @var \Berlioz\Mailer\Address[] Bcc */
+    /** @var Address[] Bcc */
     private $bcc;
     /** @var string Subject */
     private $subject;
@@ -40,7 +40,7 @@ class Mail
     private $text;
     /** @var string Html body */
     private $html;
-    /** @var \Berlioz\Mailer\Attachment[] $attachments */
+    /** @var Attachment[] $attachments */
     private $attachments;
 
     /**
@@ -61,7 +61,7 @@ class Mail
      * @param array $headers
      *
      * @return static
-     * @throws \Berlioz\Mailer\Exception\InvalidArgumentException if one reserved headers is used.
+     * @throws InvalidArgumentException if one reserved headers is used.
      */
     public function setHeaders(array $headers): Mail
     {
@@ -97,7 +97,7 @@ class Mail
      * @param bool $replace Replacement if same header present
      *
      * @return static
-     * @throws \Berlioz\Mailer\Exception\InvalidArgumentException if reserved header is used.
+     * @throws InvalidArgumentException if reserved header is used.
      */
     public function addHeader(string $name, $value, bool $replace = false): Mail
     {
@@ -122,7 +122,7 @@ class Mail
     /**
      * Get from address.
      *
-     * @return \Berlioz\Mailer\Address|null
+     * @return Address|null
      */
     public function getFrom(): ?Address
     {
@@ -132,7 +132,7 @@ class Mail
     /**
      * Set from address.
      *
-     * @param \Berlioz\Mailer\Address $from
+     * @param Address $from
      *
      * @return static
      */
@@ -146,7 +146,7 @@ class Mail
     /**
      * Get to addresses.
      *
-     * @return \Berlioz\Mailer\Address[]
+     * @return Address[]
      */
     public function getTo(): array
     {
@@ -156,7 +156,7 @@ class Mail
     /**
      * Set to addresses.
      *
-     * @param \Berlioz\Mailer\Address[] $to
+     * @param Address[] $to
      *
      * @return static
      */
@@ -170,7 +170,7 @@ class Mail
     /**
      * Get cc addresses.
      *
-     * @return \Berlioz\Mailer\Address[]
+     * @return Address[]
      */
     public function getCc(): array
     {
@@ -180,7 +180,7 @@ class Mail
     /**
      * Set cc addresses.
      *
-     * @param \Berlioz\Mailer\Address[] $cc
+     * @param Address[] $cc
      *
      * @return static
      */
@@ -194,7 +194,7 @@ class Mail
     /**
      * Get bcc addresses.
      *
-     * @return \Berlioz\Mailer\Address[]
+     * @return Address[]
      */
     public function getBcc(): array
     {
@@ -204,7 +204,7 @@ class Mail
     /**
      * Set bcc addresses.
      *
-     * @param \Berlioz\Mailer\Address[] $bcc
+     * @param Address[] $bcc
      *
      * @return static
      */
@@ -363,7 +363,7 @@ EOD;
     /**
      * Get attachments.
      *
-     * @return \Berlioz\Mailer\Attachment[]
+     * @return Attachment[]
      */
     public function getAttachments(): array
     {
@@ -373,7 +373,7 @@ EOD;
     /**
      * Set attachments.
      *
-     * @param \Berlioz\Mailer\Attachment[] $attachments
+     * @param Attachment[] $attachments
      *
      * @return static
      */

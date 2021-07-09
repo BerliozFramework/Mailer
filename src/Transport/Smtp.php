@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Berlioz\Mailer\Transport;
 
+use Berlioz\Mailer\Address;
 use Berlioz\Mailer\Exception\TransportException;
 use Berlioz\Mailer\Mail;
 use Psr\Log\LoggerAwareInterface;
@@ -69,7 +70,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
     /**
      * Smtp destructor.
      *
-     * @throws \Berlioz\Mailer\Exception\TransportException if disconnection throw exception.
+     * @throws TransportException if disconnection throw exception.
      */
     public function __destruct()
     {
@@ -98,7 +99,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
      * Connect to resource.
      *
      * @return void
-     * @throws \Berlioz\Mailer\Exception\TransportException
+     * @throws TransportException
      */
     private function connect(): void
     {
@@ -161,7 +162,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
      * Disconnect resource.
      *
      * @return void
-     * @throws \Berlioz\Mailer\Exception\TransportException
+     * @throws TransportException
      */
     private function disconnect(): void
     {
@@ -204,7 +205,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
      * @param mixed $response Complete response
      *
      * @return bool|string Return code of SMTP command
-     * @throws \Berlioz\Mailer\Exception\TransportException
+     * @throws TransportException
      */
     private function get(&$response = null)
     {
@@ -227,7 +228,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
      * @param $data
      *
      * @return void
-     * @throws \Berlioz\Mailer\Exception\TransportException
+     * @throws TransportException
      */
     private function write($data): void
     {
@@ -276,7 +277,7 @@ class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareI
                 throw new TransportException('No recipients for the mail');
             }
 
-            /** @var \Berlioz\Mailer\Address $address */
+            /** @var Address $address */
             foreach ($addresses as $address) {
                 $this->write(sprintf('RCPT TO: <%s>', $address->getMail()));
 
