@@ -24,8 +24,6 @@ use Psr\Log\LogLevel;
 
 /**
  * Class Smtp.
- *
- * @package Berlioz\Mailer\Transport
  */
 class Smtp extends AbstractTransport implements TransportInterface, LoggerAwareInterface
 {

@@ -20,8 +20,6 @@ use Berlioz\Mailer\Mail;
 
 /**
  * Class PhpMail.
- *
- * @package Berlioz\Mailer\Transport
  */
 class PhpMail extends AbstractTransport implements TransportInterface
 {

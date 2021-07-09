@@ -18,8 +18,6 @@ use Berlioz\Mailer\Exception\MailerException;
 
 /**
  * Class Attachment.
- *
- * @package Berlioz\Mailer
  */
 class Attachment
 {

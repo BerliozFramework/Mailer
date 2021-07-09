@@ -20,8 +20,6 @@ use Berlioz\Mailer\Mail;
 
 /**
  * Interface TransportInterface.
- *
- * @package Berlioz\Mailer\Transport
  */
 interface TransportInterface
 {

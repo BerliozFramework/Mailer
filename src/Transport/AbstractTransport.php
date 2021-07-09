@@ -21,8 +21,6 @@ use Berlioz\Mailer\Mail;
 
 /**
  * Class AbstractTransport.
- *
- * @package Berlioz\Mailer\Transport
  */
 abstract class AbstractTransport implements TransportInterface
 {

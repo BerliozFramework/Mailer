@@ -18,8 +18,6 @@ use Berlioz\Mailer\Exception\InvalidArgumentException;
 
 /**
  * Class Mail.
- *
- * @package Berlioz\Mailer
  */
 class Mail
 {

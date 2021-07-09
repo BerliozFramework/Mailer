@@ -17,7 +17,6 @@ namespace Berlioz\Mailer\Transport;
 /**
  * Class Mail.
  *
- * @package Berlioz\Mailer\Transport
  * @deprecated 1.2.0 No longer used by internal code and not recommended. Use PhpMail instead.
  */
 class Mail extends PhpMail
