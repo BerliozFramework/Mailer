@@ -1,9 +1,9 @@
 # Berlioz Mailer
 
 [![Latest Version](https://img.shields.io/packagist/v/berlioz/mailer.svg?style=flat-square)](https://github.com/BerliozFramework/Mailer/releases)
-[![Software license](https://img.shields.io/github/license/BerliozFramework/Mailer.svg?style=flat-square)](https://github.com/BerliozFramework/Mailer/blob/master/LICENSE)
-[![Build Status](https://img.shields.io/travis/com/BerliozFramework/Mailer/master.svg?style=flat-square)](https://travis-ci.com/BerliozFramework/Mailer)
-[![Quality Grade](https://img.shields.io/codacy/grade/00aa697606b949ca8d759e2909b08eec/master.svg?style=flat-square)](https://www.codacy.com/manual/BerliozFramework/Mailer)
+[![Software license](https://img.shields.io/github/license/BerliozFramework/Mailer.svg?style=flat-square)](https://github.com/BerliozFramework/Mailer/blob/main/LICENSE)
+[![Build Status](https://img.shields.io/github/workflow/status/BerliozFramework/Mailer/Tests/main.svg?style=flat-square)](https://github.com/BerliozFramework/Mailer/actions/workflows/tests.yml?query=branch%3Amain)
+[![Quality Grade](https://img.shields.io/codacy/grade/00aa697606b949ca8d759e2909b08eec/main.svg?style=flat-square)](https://www.codacy.com/manual/BerliozFramework/Mailer)
 [![Total Downloads](https://img.shields.io/packagist/dt/berlioz/mailer.svg?style=flat-square)](https://packagist.org/packages/berlioz/mailer)
 
 **Berlioz Mailer** is a PHP library for sending mail, with or without local server.
