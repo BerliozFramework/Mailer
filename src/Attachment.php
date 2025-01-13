@@ -31,6 +31,8 @@ class Attachment
     private $disposition;
     /** @var string File name */
     private $fileName;
+    /** @var ?string Contents */
+    private $_contents;
 
     /**
      * Attachment constructor.
@@ -45,6 +47,28 @@ class Attachment
             $this->name = basename($fileName);
             $this->disposition = 'attachment';
         }
+    }
+
+    public function __serialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'type' => $this->getType(),
+            'name' => $this->name,
+            'disposition' => $this->disposition,
+            'fileName' => $this->fileName,
+            'contents' => $this->getContents(),
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->id = $data['id'];
+        $this->type = $data['type'];
+        $this->name = $data['name'];
+        $this->disposition = $data['disposition'];
+        $this->fileName = $data['fileName'];
+        $this->_contents = $data['contents'];
     }
 
     /**
@@ -175,6 +199,10 @@ class Attachment
      */
     public function getContents()
     {
+        if (null !== $this->_contents) {
+            return $this->_contents;
+        }
+
         return file_get_contents($this->fileName);
     }
 }

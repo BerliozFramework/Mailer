@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. This projec
 to [Semantic Versioning] (http://semver.org/). For change log format,
 use [Keep a Changelog] (http://keepachangelog.com/).
 
+## [1.4.0] - 2025-01-13
+
+### Changed
+
+- Attachment serialization store contents of file
+
 ## [1.3.2] - 2021-07-09
 
 ### Changed
