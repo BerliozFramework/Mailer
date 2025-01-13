@@ -2,7 +2,7 @@
 
 [![Latest Version](https://img.shields.io/packagist/v/berlioz/mailer.svg?style=flat-square)](https://github.com/BerliozFramework/Mailer/releases)
 [![Software license](https://img.shields.io/github/license/BerliozFramework/Mailer.svg?style=flat-square)](https://github.com/BerliozFramework/Mailer/blob/main/LICENSE)
-[![Build Status](https://img.shields.io/github/workflow/status/BerliozFramework/Mailer/Tests/main.svg?style=flat-square)](https://github.com/BerliozFramework/Mailer/actions/workflows/tests.yml?query=branch%3Amain)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/BerliozFramework/Mailer/tests.yml?branch=1.x&style=flat-square)](https://github.com/BerliozFramework/Mailer/actions/workflows/tests.yml?query=branch%3A1.x)
 [![Quality Grade](https://img.shields.io/codacy/grade/00aa697606b949ca8d759e2909b08eec/main.svg?style=flat-square)](https://www.codacy.com/manual/BerliozFramework/Mailer)
 [![Total Downloads](https://img.shields.io/packagist/dt/berlioz/mailer.svg?style=flat-square)](https://packagist.org/packages/berlioz/mailer)
 
